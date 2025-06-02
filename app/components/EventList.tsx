@@ -1,7 +1,9 @@
+import { FlatList, StyleProp, ViewStyle } from "react-native"
+
 import { events } from "@/data"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { FlatList, StyleProp, ViewStyle } from "react-native"
+
 import { Event } from "./Event"
 
 export interface EventListProps {
@@ -24,7 +26,7 @@ export const EventList = (props: EventListProps) => {
       contentContainerStyle={[themed($container), style]}
       data={events}
       renderItem={({ item: event }) => <Event event={event} />}
-      keyExtractor={(event) => event.idEvento}
+      keyExtractor={(event) => event.idEvento.toString()}
     />
   )
 }

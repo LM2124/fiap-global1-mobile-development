@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "ziishaned.auto-self-close-tag",
+    ]
+}

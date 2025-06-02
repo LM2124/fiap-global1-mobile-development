@@ -4,11 +4,14 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import * as Screens from "@/screens"
-import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ComponentProps } from "react"
+import type { Evento } from "types"
+
+import * as Screens from "@/screens"
+import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
+
 import Config from "../config"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 
@@ -26,9 +29,10 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
   // 🔥 Your screens go here
   Home: undefined
+  // Fazendo a tipagem desse jeito caso eu mude o tipo de `idEvento` depois
+  EventView: { eventId: Evento["idEvento"] }
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -61,9 +65,9 @@ const AppStack = () => {
         },
       }}
     >
-      {/* <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} /> */}
       {/** 🔥 Your screens go here */}
       <Stack.Screen name="Home" component={Screens.HomeScreen} />
+      <Stack.Screen name="EventView" component={Screens.EventViewScreen} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )

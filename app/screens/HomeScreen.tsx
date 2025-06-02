@@ -1,7 +1,9 @@
-import { EventList, Header, Screen } from "@/components"
-import { AppStackScreenProps } from "@/navigators"
 import { FC } from "react"
 import { ViewStyle } from "react-native"
+
+import { EventList, Header, Screen } from "@/components"
+import { AppStackScreenProps } from "@/navigators"
+import { useAppTheme } from "@/utils/useAppTheme"
 // import { useNavigation } from "@react-navigation/native"
 
 interface HomeScreenProps extends AppStackScreenProps<"Home"> {}
@@ -11,10 +13,12 @@ interface HomeScreenProps extends AppStackScreenProps<"Home"> {}
 export const HomeScreen: FC<HomeScreenProps> = () => {
   // Pull in navigation via hook
   // const navigation = useNavigation()
+  const { theme } = useAppTheme()
+
   return (
     <Screen style={$root} preset="scroll">
       <Header title="Bem-Vindo" />
-      <EventList />
+      <EventList style={{ padding: theme.spacing.md }} />
     </Screen>
   )
 }

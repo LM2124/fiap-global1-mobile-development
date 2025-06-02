@@ -1,0 +1,26 @@
+{
+	"editor.codeActionsOnSave": {
+		// Autoformatação ao salvar o arquivo
+		"source.fixAll.eslint": "explicit",
+	},
+
+	"[typescriptreact]": {
+		// End-of-line LF (padrão linux) ao invés de CRLF (padrão windows)
+		"files.eol": "\n",
+
+		// Editar ou renomear uma tag edita o correspondente dela ao mesmo tempo
+		"editor.linkedEditing": true,
+
+		// Desligado em favor da extensão auto-self-close-tag
+		"typescript.autoClosingTags": false
+	},
+
+	// Sempre terminar arquivos com um trailing newline.
+	// Deixa um pouco mais amigável pro git.
+	"files.insertFinalNewline": true,
+
+	// Esse emmet abbreviation tava tentando oferecer
+	// autocomplete de tags HTML nos arquivos .tsx
+	// Isso já me incomodou o suficiente pra me fazer buscar como desliga 👍
+	"emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
+}

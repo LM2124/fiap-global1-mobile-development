@@ -1,51 +1,68 @@
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { useMemo } from "react"
+import { ViewStyle } from "react-native"
+import { Evento } from "types"
+
 import { Text } from "@/components/Text"
+import type { AppStackParamList } from "@/navigators"
 import type { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { useMemo } from "react"
-import { StyleProp, View, ViewStyle } from "react-native"
-import { Evento } from "types"
+
+import { Card } from "./Card"
+import { Icon } from "./Icon"
+
+// Todo: Ao invés de usar useNavigation(), considerar
+// passar a navigation por props por Home -> EventList -> Event
+type EventNavigationProps = NativeStackNavigationProp<AppStackParamList, "EventView">
 
 export interface EventProps {
   event: Evento
-
-  /**
-   * An optional style override useful for padding & margin.
-   */
-  style?: StyleProp<ViewStyle>
 }
 
 /**
  * Renderiza um Evento
  */
 export const Event = (props: EventProps) => {
-  const { event, style } = props
+  const { event } = props
   const { themed } = useAppTheme()
-  const $styles = [themed($eventContainer), style]
+  const navigation = useNavigation<EventNavigationProps>()
 
-  const estDamage = useMemo(
+  const danoTotal = useMemo(
     () =>
       event.danos
-        .map((dano) => dano.danoMonetario)
-        .filter((dano) => dano && dano > 0)
-        .reduce((a, b) => (a || 0) + (b || 0)),
+        .map((dano) => dano.danoMonetario || 0)
+        .filter((dano) => dano > 0)
+        .reduce((a, b) => a + b),
     [event.danos],
   )
 
   return (
-    <View style={$styles}>
-      <Text preset="heading">{event.descricao}</Text>
-      <Text preset="subheading">Causas: {event.causas.join(", ")}</Text>
-      {(estDamage || 0) > 0 && <Text>Dano monetário total: R$ {estDamage?.toFixed(2)}</Text>}
-      <Text>
-        Registrado por: <b>{event.autor.name}</b>
-      </Text>
-    </View>
+    <Card
+      onPress={() => navigation.navigate("EventView", { eventId: event.idEvento })}
+      heading={event.title}
+      RightComponent={<Icon icon="caretRight" containerStyle={themed($accessoryContainer)} />}
+      ContentComponent={
+        <>
+          <Text>{event.descricao}</Text>
+
+          <Text>
+            <b>Causas:</b> {event.causas.join(", ")}
+          </Text>
+
+          {danoTotal > 0 && (
+            <Text>
+              <b>Dano monetário total:</b> R$ {danoTotal?.toFixed(2)}
+            </Text>
+          )}
+        </>
+      }
+      footer={event.dataHora.toLocaleDateString() + " | Registrado por: " + event.autor.name}
+    />
   )
 }
 
-const $eventContainer: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+const $accessoryContainer: ThemedStyle<ViewStyle> = () => ({
+  alignItems: "center",
   justifyContent: "center",
-  padding: spacing.lg,
-  borderRadius: spacing.lg,
-  backgroundColor: colors.tint,
 })
