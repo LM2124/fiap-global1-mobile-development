@@ -23,6 +23,7 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [eventTitle, setEventTitle] = useState("")
   const [savedDamages, setSavedDamages] = useState<Danos[]>([])
+  const [hasExistingDamages, setHasExistingDamages] = useState(false)
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -31,6 +32,9 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
         if (event) {
           setEventTitle(event.title)
           setSavedDamages(event.danos)
+          if (event.danos && event.danos.length > 0) {
+            setHasExistingDamages(true)
+          }
         }
       } catch (error) {
         console.error("Erro ao carregar evento:", error)
@@ -106,20 +110,8 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
   }
 
   const handleFinish = () => {
-    Alert.alert(
-      "Registro Completo", 
-      "Parabéns! Você concluiu o registro do evento. Agora você pode ver as recomendações para situações similares.",
-      [
-        {
-          text: "Ver Recomendações",
-          onPress: () => navigation.navigate("Recommendations", { eventId: actualEventId })
-        },
-        {
-          text: "Voltar ao Início",
-          onPress: () => navigation.navigate("Home")
-        }
-      ]
-    )
+    // Navega automaticamente para as recomendações
+    navigation.navigate("Recommendations", { eventId: actualEventId })
   }
 
   const getTotalDamages = (): number => {
@@ -220,12 +212,31 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
         💡 Você pode adicionar múltiplos prejuízos ao mesmo evento. Cada prejuízo será registrado separadamente.
       </Text>
 
-      <Button
-        text="Finalizar Registro"
-        preset="reversed"
-        style={$finishButton}
-        onPress={handleFinish}
-      />
+      {hasExistingDamages ? (
+        <>
+          <Text style={$existingDataText}>
+            ✅ Prejuízos já foram registrados. Você pode adicionar mais ou finalizar.
+          </Text>
+          <Button
+            text="Ver Recomendações"
+            style={$continueButton}
+            onPress={handleFinish}
+          />
+          <Button
+            text="Voltar ao Início"
+            preset="reversed"
+            style={$finishButton}
+            onPress={() => navigation.navigate("Home")}
+          />
+        </>
+      ) : (
+        <Button
+          text="Pular e Finalizar"
+          preset="reversed"
+          style={$finishButton}
+          onPress={handleFinish}
+        />
+      )}
     </Screen>
   )
 }
@@ -302,4 +313,17 @@ const $infoText: TextStyle = {
 
 const $finishButton: ViewStyle = {
   marginBottom: 16,
+}
+
+const $existingDataText: TextStyle = {
+  marginTop: 16,
+  marginBottom: 16,
+  fontSize: 14,
+  color: "#4CAF50",
+  textAlign: "center",
+  fontWeight: "500",
+}
+
+const $continueButton: ViewStyle = {
+  marginBottom: 12,
 }

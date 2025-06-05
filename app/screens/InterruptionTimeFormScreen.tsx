@@ -24,6 +24,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
   const [observacoes, setObservacoes] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [eventTitle, setEventTitle] = useState("")
+  const [hasExistingTimeInfo, setHasExistingTimeInfo] = useState(false)
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -31,6 +32,12 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         const event = await eventService.getEventById(actualEventId)
         if (event) {
           setEventTitle(event.title)
+          
+          // Verifica se já existem informações de tempo na descrição
+          if (event.descricao.includes("--- INFORMAÇÕES DE TEMPO ---")) {
+            setHasExistingTimeInfo(true)
+          }
+          
           // Pré-preencher com data atual se não houver dados
           const now = new Date()
           const today = now.toISOString().split('T')[0]
@@ -123,16 +130,8 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
       })
 
       if (success) {
-        Alert.alert(
-          "Sucesso", 
-          "Informações de tempo salvas com sucesso! Agora vamos registrar os prejuízos causados.",
-          [
-            {
-              text: "Continuar",
-              onPress: () => navigation.navigate("DamagesForm", { eventId: actualEventId })
-            }
-          ]
-        )
+        // Avança automaticamente para a próxima tela
+        navigation.navigate("DamagesForm", { eventId: actualEventId })
       } else {
         Alert.alert("Erro", "Não foi possível salvar as informações. Tente novamente.")
       }
@@ -225,19 +224,39 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         containerStyle={$field}
       />
 
-      <Button
-        text={isLoading ? "Salvando..." : "Salvar Informações"}
-        style={$saveButton}
-        disabled={isLoading}
-        onPress={handleSaveTime}
-      />
-      
-      <Button
-        text="Pular esta etapa"
-        preset="reversed"
-        style={$skipButton}
-        onPress={() => navigation.navigate("DamagesForm", { eventId: actualEventId })}
-      />
+      {hasExistingTimeInfo ? (
+        <>
+          <Text style={$existingDataText}>
+            ✅ Informações de tempo já foram registradas. Você pode editá-las ou prosseguir para a próxima etapa.
+          </Text>
+          <Button
+            text={isLoading ? "Salvando..." : "Atualizar Informações"}
+            style={$saveButton}
+            disabled={isLoading}
+            onPress={handleSaveTime}
+          />
+          <Button
+            text="Continuar para Prejuízos"
+            style={$continueButton}
+            onPress={() => navigation.navigate("DamagesForm", { eventId: actualEventId })}
+          />
+        </>
+      ) : (
+        <>
+          <Button
+            text={isLoading ? "Salvando..." : "Salvar Informações"}
+            style={$saveButton}
+            disabled={isLoading}
+            onPress={handleSaveTime}
+          />
+          <Button
+            text="Pular esta etapa"
+            preset="reversed"
+            style={$skipButton}
+            onPress={() => navigation.navigate("DamagesForm", { eventId: actualEventId })}
+          />
+        </>
+      )}
     </Screen>
   )
 }
@@ -283,5 +302,18 @@ const $saveButton: ViewStyle = {
 }
 
 const $skipButton: ViewStyle = {
+  marginBottom: 16,
+}
+
+const $existingDataText: TextStyle = {
+  marginTop: 16,
+  marginBottom: 16,
+  fontSize: 14,
+  color: "#4CAF50",
+  textAlign: "center",
+  fontWeight: "500",
+}
+
+const $continueButton: ViewStyle = {
   marginBottom: 16,
 }

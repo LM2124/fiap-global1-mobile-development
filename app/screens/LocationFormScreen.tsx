@@ -21,6 +21,7 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
   const [coordenadas, setCoordenadas] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [eventTitle, setEventTitle] = useState("")
+  const [hasExistingLocation, setHasExistingLocation] = useState(false)
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -30,6 +31,7 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
           setEventTitle(event.title)
           if (event.local?.descricao && event.local.descricao !== "Localização a ser definida") {
             setDescricao(event.local.descricao)
+            setHasExistingLocation(true)
             if (event.local.coordenadas && event.local.coordenadas.length === 2) {
               setCoordenadas(`${event.local.coordenadas[0] ?? 0}, ${event.local.coordenadas[1] ?? 0}`)
             }
@@ -69,16 +71,8 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
       const success = await eventService.addLocationToEvent(actualEventId, local)
       
       if (success) {
-        Alert.alert(
-          "Sucesso", 
-          "Localização salva com sucesso! Agora vamos registrar o tempo de interrupção.",
-          [
-            {
-              text: "Continuar",
-              onPress: () => navigation.navigate("InterruptionTimeForm", { eventId: actualEventId })
-            }
-          ]
-        )
+        // Avança automaticamente para a próxima tela sem mostrar alert
+        navigation.navigate("InterruptionTimeForm", { eventId: actualEventId })
       } else {
         Alert.alert("Erro", "Não foi possível salvar a localização. Tente novamente.")
       }
@@ -136,19 +130,39 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
         💡 As coordenadas podem ser obtidas através de aplicativos de mapa como Google Maps ou GPS.
       </Text>
 
-      <Button
-        text={isLoading ? "Salvando..." : "Salvar Localização"}
-        style={$saveButton}
-        disabled={isLoading}
-        onPress={handleSaveLocation}
-      />
-      
-      <Button
-        text="Pular esta etapa"
-        preset="reversed"
-        style={$skipButton}
-        onPress={() => navigation.navigate("InterruptionTimeForm", { eventId })}
-      />
+      {hasExistingLocation ? (
+        <>
+          <Text style={$existingDataText}>
+            ✅ Localização já foi definida. Você pode editá-la ou prosseguir para a próxima etapa.
+          </Text>
+          <Button
+            text={isLoading ? "Salvando..." : "Atualizar Localização"}
+            style={$saveButton}
+            disabled={isLoading}
+            onPress={handleSaveLocation}
+          />
+          <Button
+            text="Continuar para Tempo de Interrupção"
+            style={$continueButton}
+            onPress={() => navigation.navigate("InterruptionTimeForm", { eventId: actualEventId })}
+          />
+        </>
+      ) : (
+        <>
+          <Button
+            text={isLoading ? "Salvando..." : "Salvar Localização"}
+            style={$saveButton}
+            disabled={isLoading}
+            onPress={handleSaveLocation}
+          />
+          <Button
+            text="Pular esta etapa"
+            preset="reversed"
+            style={$skipButton}
+            onPress={() => navigation.navigate("InterruptionTimeForm", { eventId: actualEventId })}
+          />
+        </>
+      )}
     </Screen>
   )
 }
@@ -188,5 +202,18 @@ const $saveButton: ViewStyle = {
 }
 
 const $skipButton: ViewStyle = {
+  marginBottom: 16,
+}
+
+const $existingDataText: TextStyle = {
+  marginTop: 16,
+  marginBottom: 16,
+  fontSize: 14,
+  color: "#4CAF50",
+  textAlign: "center",
+  fontWeight: "500",
+}
+
+const $continueButton: ViewStyle = {
   marginBottom: 16,
 }

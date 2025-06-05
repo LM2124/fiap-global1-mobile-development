@@ -1,13 +1,15 @@
 import { FC, useState } from "react"
 import { Alert, ViewStyle } from "react-native"
-import { useNavigation } from "@/utils/navigationMock"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 import { Button, Header, Screen, Text, TextField } from "@/components"
 import { eventService } from "@/services/eventService"
 import { Causas } from "types"
+import type { AppStackParamList } from "@/navigators"
 
 export const EventCreateScreen: FC = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
   
   const [title, setTitle] = useState("")
   const [descricao, setDescricao] = useState("")
@@ -27,6 +29,11 @@ export const EventCreateScreen: FC = () => {
   }
 
   const handleCreateEvent = async () => {
+    console.log("=== Iniciando criação de evento ===")
+    console.log("Título:", title)
+    console.log("Descrição:", descricao)
+    console.log("Causas selecionadas:", selectedCausas)
+
     if (!title.trim()) {
       Alert.alert("Erro", "Por favor, insira um título para o evento")
       return
@@ -45,25 +52,27 @@ export const EventCreateScreen: FC = () => {
     setIsLoading(true)
     
     try {
-      const newEvent = await eventService.createEvent({
+      console.log("=== Chamando eventService.createEvent ===")
+      const eventData = {
         title: title.trim(),
         descricao: descricao.trim(),
         causas: selectedCausas,
-        local: { descricao: "Localização a ser definida" } // Será preenchida na próxima tela
-      })
+        local: { descricao: "Localização a ser definida" }
+      }
+      console.log("Dados do evento:", eventData)
 
-      Alert.alert(
-        "Sucesso", 
-        "Evento criado com sucesso! Agora vamos adicionar mais detalhes.",
-        [
-          {
-            text: "Continuar",
-            onPress: () => navigation.navigate("LocationForm", { eventId: newEvent.idEvento })
-          }
-        ]
-      )
+      const newEvent = await eventService.createEvent(eventData)
+      console.log("=== Evento criado com sucesso ===")
+      console.log("Novo evento:", newEvent)
+      console.log("Navegando para EventView com eventId:", newEvent.idEvento)
+      
+      navigation.navigate("EventView", { eventId: newEvent.idEvento })
     } catch (error) {
-      console.error("Erro ao criar evento:", error)
+      console.error("=== ERRO ao criar evento ===")
+      console.error("Tipo do erro:", typeof error)
+      console.error("Erro completo:", error)
+      console.error("Mensagem do erro:", error instanceof Error ? error.message : String(error))
+      console.error("Stack trace:", error instanceof Error ? error.stack : "N/A")
       Alert.alert("Erro", "Não foi possível criar o evento. Tente novamente.")
     } finally {
       setIsLoading(false)

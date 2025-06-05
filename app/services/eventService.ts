@@ -43,29 +43,54 @@ class EventService {
       await storage.save(this.NEXT_ID_KEY, 2)
       return 1
     }
-  }
-  // Criar um novo evento
+  }  // Criar um novo evento
   async createEvent(data: EventCreateData): Promise<Evento> {
-    const events = await this.getAllEvents()
-    const nextId = await this.getNextId()
+    console.log("=== EventService.createEvent iniciado ===")
+    console.log("Dados recebidos:", data)
 
-    const newEvent: Evento = {
-      idEvento: nextId,
-      autor: { 
-        id: "user1", 
-        name: "Usuário Local"
-      }, // User mockado por enquanto
-      title: data.title,
-      descricao: data.descricao,
-      dataHora: new Date(),
-      causas: data.causas,
-      local: data.local,
-      danos: data.danos ?? []
+    try {
+      console.log("Carregando eventos existentes...")
+      const events = await this.getAllEvents()
+      console.log("Eventos existentes carregados:", events.length, "eventos")
+
+      console.log("Obtendo próximo ID...")
+      const nextId = await this.getNextId()
+      console.log("Próximo ID obtido:", nextId)
+
+      const newEvent: Evento = {
+        idEvento: nextId,
+        autor: { 
+          id: "user1", 
+          name: "Usuário Local"
+        }, // User mockado por enquanto
+        title: data.title,
+        descricao: data.descricao,
+        dataHora: new Date(),
+        causas: data.causas,
+        local: data.local,
+        danos: data.danos ?? []
+      }
+
+      console.log("Novo evento criado em memória:", newEvent)
+
+      events.push(newEvent)
+      console.log("Evento adicionado à lista. Total de eventos agora:", events.length)
+
+      console.log("Salvando eventos...")
+      const saveResult = await this.saveEvents(events)
+      console.log("Resultado do salvamento:", saveResult)
+
+      if (!saveResult) {
+        throw new Error("Falha ao salvar o evento no storage")
+      }
+
+      console.log("=== EventService.createEvent concluído com sucesso ===")
+      return newEvent
+    } catch (error) {
+      console.error("=== ERRO em EventService.createEvent ===")
+      console.error("Erro:", error)
+      throw error
     }
-
-    events.push(newEvent)
-    await this.saveEvents(events)
-    return newEvent
   }
 
   // Obter evento por ID

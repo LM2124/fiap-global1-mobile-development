@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react"
-import { Alert, ViewStyle, TextStyle } from "react-native"
+import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
@@ -199,16 +199,10 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
   }
 
   const handleBackToHome = () => {
-    Alert.alert(
-      "Registro Concluído",
-      "Obrigado por registrar este evento! Suas informações ajudam a melhorar a preparação da comunidade para futuras emergências.",
-      [
-        {
-          text: "Voltar ao Início",
-          onPress: () => navigation.navigate("Home")
-        }
-      ]
-    )
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Home" }],
+    })
   }
 
   return (
