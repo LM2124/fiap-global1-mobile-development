@@ -134,13 +134,13 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
         if (__DEV__) {
           console.log(currentRouteName)
         }
-      }
-
-      // Save the current route name for later comparison
+      }      // Save the current route name for later comparison
       routeNameRef.current = currentRouteName as keyof AppStackParamList
 
       // Persist state to storage
-      storage.save(persistenceKey, state)
+      storage.save(persistenceKey, state).catch(() => {
+        // Ignore save errors
+      })
     }
   }
 
