@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import { Alert, ViewStyle, TextStyle } from "react-native"
+import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
@@ -15,6 +15,10 @@ export const EventCreateScreen: FC = () => {
   const [descricao, setDescricao] = useState("")
   const [selectedCausas, setSelectedCausas] = useState<Causas[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  // Estados de erro
+  const [titleError, setTitleError] = useState("")
+  const [descricaoError, setDescricaoError] = useState("")
+  const [causasError, setCausasError] = useState("")
 
   const causasOptions: Causas[] = [
     "Chuva", "Vento", "Deslizamento", "Árvores", "Infraestrutura", "Outro", "Desconhecido"
@@ -29,51 +33,37 @@ export const EventCreateScreen: FC = () => {
   }
 
   const handleCreateEvent = async () => {
-    console.log("=== Iniciando criação de evento ===")
-    console.log("Título:", title)
-    console.log("Descrição:", descricao)
-    console.log("Causas selecionadas:", selectedCausas)
+    let hasError = false
+    setTitleError("")
+    setDescricaoError("")
+    setCausasError("")
 
     if (!title.trim()) {
-      Alert.alert("Erro", "Por favor, insira um título para o evento")
-      return
+      setTitleError("Por favor, insira um título para o evento")
+      hasError = true
     }
-
     if (!descricao.trim()) {
-      Alert.alert("Erro", "Por favor, insira uma descrição para o evento")
-      return
+      setDescricaoError("Por favor, insira uma descrição para o evento")
+      hasError = true
     }
-
     if (selectedCausas.length === 0) {
-      Alert.alert("Erro", "Por favor, selecione pelo menos uma causa")
-      return
+      setCausasError("Por favor, selecione pelo menos uma causa")
+      hasError = true
     }
+    if (hasError) return
 
     setIsLoading(true)
-    
     try {
-      console.log("=== Chamando eventService.createEvent ===")
       const eventData = {
         title: title.trim(),
         descricao: descricao.trim(),
         causas: selectedCausas,
         local: { descricao: "Localização a ser definida" }
       }
-      console.log("Dados do evento:", eventData)
-
       const newEvent = await eventService.createEvent(eventData)
-      console.log("=== Evento criado com sucesso ===")
-      console.log("Novo evento:", newEvent)
-      console.log("Navegando para EventView com eventId:", newEvent.idEvento)
-      
       navigation.navigate("EventView", { eventId: newEvent.idEvento })
     } catch (error) {
-      console.error("=== ERRO ao criar evento ===")
-      console.error("Tipo do erro:", typeof error)
-      console.error("Erro completo:", error)
-      console.error("Mensagem do erro:", error instanceof Error ? error.message : String(error))
-      console.error("Stack trace:", error instanceof Error ? error.stack : "N/A")
-      Alert.alert("Erro", "Não foi possível criar o evento. Tente novamente.")
+      // Erro de backend ignorado para validação de campos obrigatórios
     } finally {
       setIsLoading(false)
     }
@@ -101,6 +91,8 @@ export const EventCreateScreen: FC = () => {
         value={title}
         onChangeText={setTitle}
         containerStyle={$field}
+        status={titleError ? "error" : undefined}
+        helper={titleError}
       />
 
       <TextField
@@ -111,6 +103,8 @@ export const EventCreateScreen: FC = () => {
         multiline
         numberOfLines={4}
         containerStyle={$field}
+        status={descricaoError ? "error" : undefined}
+        helper={descricaoError}
       />
 
       <Text preset="subheading" style={$sectionTitle}>
@@ -133,6 +127,9 @@ export const EventCreateScreen: FC = () => {
           onPress={() => toggleCausa(causa)}
         />
       ))}
+      {!!causasError && (
+        <Text style={{ color: '#FF3B30', marginBottom: 8, textAlign: 'center', fontSize: 14 }}>{causasError}</Text>
+      )}
 
       <Button
         text={isLoading ? "Criando..." : "Criar Evento"}

@@ -24,6 +24,7 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
   const [eventTitle, setEventTitle] = useState("")
   const [savedDamages, setSavedDamages] = useState<Danos[]>([])
   const [hasExistingDamages, setHasExistingDamages] = useState(false)
+  const [descricaoDanoError, setDescricaoDanoError] = useState("")
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -72,8 +73,9 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
   }
 
   const handleAddDamage = async () => {
+    setDescricaoDanoError("")
     if (!descricaoDano.trim()) {
-      Alert.alert("Erro", "Por favor, descreva o prejuízo causado")
+      setDescricaoDanoError("Por favor, descreva o prejuízo causado")
       return
     }
 
@@ -180,6 +182,8 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
         multiline
         numberOfLines={3}
         containerStyle={$field}
+        status={descricaoDanoError ? "error" : undefined}
+        helper={descricaoDanoError}
       />
 
       <TextField
@@ -247,7 +251,7 @@ const $root: ViewStyle = {
   backgroundColor: "#f8f9fa",
 }
 
-const $title: ViewStyle = {
+const $title: TextStyle = {
   marginBottom: 8,
   marginTop: 16,
   textAlign: "center",
@@ -259,13 +263,13 @@ const $eventTitle: TextStyle = {
   textAlign: "center",
 }
 
-const $subtitle: ViewStyle = {
+const $subtitle: TextStyle = {
   marginBottom: 24,
   textAlign: "center",
   color: "#444",
 }
 
-const $sectionTitle: ViewStyle = {
+const $sectionTitle: TextStyle = {
   marginTop: 16,
   marginBottom: 12,
   textAlign: "center",

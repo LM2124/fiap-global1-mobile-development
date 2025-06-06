@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react"
-import { Alert, ViewStyle, TextStyle } from "react-native"
+import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
@@ -22,6 +22,7 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [eventTitle, setEventTitle] = useState("")
   const [hasExistingLocation, setHasExistingLocation] = useState(false)
+  const [descricaoError, setDescricaoError] = useState("")
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -55,8 +56,9 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
   }
 
   const handleSaveLocation = async () => {
+    setDescricaoError("")
     if (!descricao.trim()) {
-      Alert.alert("Erro", "Por favor, informe a descrição da localização")
+      setDescricaoError("Por favor, informe a descrição da localização")
       return
     }
 
@@ -74,11 +76,11 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
         // Avança automaticamente para a próxima tela sem mostrar alert
         navigation.navigate("InterruptionTimeForm", { eventId: actualEventId })
       } else {
-        Alert.alert("Erro", "Não foi possível salvar a localização. Tente novamente.")
+        setDescricaoError("Não foi possível salvar a localização. Tente novamente.")
       }
     } catch (error) {
       console.error("Erro ao salvar localização:", error)
-      Alert.alert("Erro", "Não foi possível salvar a localização. Tente novamente.")
+      setDescricaoError("Não foi possível salvar a localização. Tente novamente.")
     } finally {
       setIsLoading(false)
     }
@@ -114,7 +116,8 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
         multiline
         numberOfLines={3}
         containerStyle={$field}
-        helper="Descreva de forma clara onde ocorreu o evento"
+        status={descricaoError ? "error" : undefined}
+        helper={descricaoError || "Descreva de forma clara onde ocorreu o evento"}
       />
 
       <TextField
@@ -173,7 +176,7 @@ const $root: ViewStyle = {
   backgroundColor: "#f8f9fa",
 }
 
-const $title: ViewStyle = {
+const $title: TextStyle = {
   marginBottom: 8,
   marginTop: 16,
   textAlign: "center",
@@ -185,7 +188,7 @@ const $eventTitle: TextStyle = {
   textAlign: "center",
 }
 
-const $subtitle: ViewStyle = {
+const $subtitle: TextStyle = {
   marginBottom: 24,
   textAlign: "center",
   color: "#444",

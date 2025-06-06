@@ -1,5 +1,6 @@
 import { FC, useState, useEffect } from "react"
-import { Alert, ViewStyle, TextStyle } from "react-native"
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { Alert, ViewStyle, TextStyle, Platform } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
@@ -25,6 +26,12 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
   const [isLoading, setIsLoading] = useState(false)
   const [eventTitle, setEventTitle] = useState("")
   const [hasExistingTimeInfo, setHasExistingTimeInfo] = useState(false)
+  const [showDateInicioPicker, setShowDateInicioPicker] = useState(false)
+  const [showHoraInicioPicker, setShowHoraInicioPicker] = useState(false)
+  const [showDateFimPicker, setShowDateFimPicker] = useState(false)
+  const [showHoraFimPicker, setShowHoraFimPicker] = useState(false)
+
+  const isWeb = Platform.OS === 'web'
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -83,22 +90,24 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
   }, [dataInicio, horaInicio, dataFim, horaFim])
 
   const validateDates = (): boolean => {
-    if (!dataInicio || !horaInicio) {
-      Alert.alert("Erro", "Por favor, informe a data e hora de início da interrupção")
-      return false
+    let hasError = false
+    if (!dataInicio) {
+      Alert.alert("Por favor, informe a data de início da interrupção")
+      hasError = true
     }
-
+    if (!horaInicio) {
+      Alert.alert("Por favor, informe a hora de início da interrupção")
+      hasError = true
+    }
     if (dataFim && horaFim) {
       const inicio = new Date(`${dataInicio}T${horaInicio}:00`)
       const fim = new Date(`${dataFim}T${horaFim}:00`)
-      
       if (fim <= inicio) {
-        Alert.alert("Erro", "A data/hora de fim deve ser posterior à data/hora de início")
-        return false
+        Alert.alert("A data/hora de fim deve ser posterior à data/hora de início")
+        hasError = true
       }
     }
-
-    return true
+    return !hasError
   }
 
   const handleSaveTime = async () => {
@@ -143,6 +152,17 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
     }
   }
 
+  // Funções auxiliares para exibir valores formatados
+  function formatDate(date: string) {
+    if (!date) return ""
+    const d = new Date(date)
+    return d.toLocaleDateString()
+  }
+  function formatTime(time: string) {
+    if (!time) return ""
+    return time.length > 5 ? time.slice(11, 16) : time
+  }
+
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
       <Header 
@@ -169,44 +189,131 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         Início da Interrupção *
       </Text>
 
-      <TextField
-        label="Data de Início"
-        placeholder="AAAA-MM-DD"
-        value={dataInicio}
-        onChangeText={setDataInicio}
-        containerStyle={$field}
-        helper="Formato: 2024-01-15"
+      <Button
+        text={dataInicio ? `Data de Início: ${formatDate(dataInicio)}` : 'Selecionar Data de Início'}
+        style={$field}
+        onPress={() => !isWeb && setShowDateInicioPicker(true)}
+        preset="reversed"
+        disabled={isWeb}
       />
-
-      <TextField
-        label="Hora de Início"
-        placeholder="HH:MM"
-        value={horaInicio}
-        onChangeText={setHoraInicio}
-        containerStyle={$field}
-        helper="Formato: 14:30"
+      {isWeb && (
+        <TextField
+          label="Data de Início"
+          placeholder="AAAA-MM-DD"
+          value={dataInicio}
+          onChangeText={setDataInicio}
+          containerStyle={$field}
+        />
+      )}
+      {!isWeb && showDateInicioPicker && (
+        <DateTimePicker
+          value={dataInicio ? new Date(dataInicio) : new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={(event, selectedDate) => {
+            setShowDateInicioPicker(false)
+            if (selectedDate) {
+              setDataInicio(selectedDate.toISOString().slice(0, 10))
+            }
+          }}
+        />
+      )}
+      <Button
+        text={horaInicio ? `Hora de Início: ${formatTime(horaInicio)}` : 'Selecionar Hora de Início'}
+        style={$field}
+        onPress={() => !isWeb && setShowHoraInicioPicker(true)}
+        preset="reversed"
+        disabled={isWeb}
       />
-
+      {isWeb && (
+        <TextField
+          label="Hora de Início"
+          placeholder="HH:MM"
+          value={horaInicio}
+          onChangeText={setHoraInicio}
+          containerStyle={$field}
+        />
+      )}
+      {!isWeb && showHoraInicioPicker && (
+        <DateTimePicker
+          value={horaInicio ? new Date(`1970-01-01T${horaInicio}:00`) : new Date()}
+          mode="time"
+          is24Hour={true}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={(event, selectedDate) => {
+            setShowHoraInicioPicker(false)
+            if (selectedDate) {
+              const h = selectedDate.getHours().toString().padStart(2, '0')
+              const m = selectedDate.getMinutes().toString().padStart(2, '0')
+              setHoraInicio(`${h}:${m}`)
+            }
+          }}
+        />
+      )}
       <Text preset="subheading" style={$sectionTitle}>
         Fim da Interrupção (Opcional)
       </Text>
-
-      <TextField
-        label="Data de Fim"
-        placeholder="AAAA-MM-DD"
-        value={dataFim}
-        onChangeText={setDataFim}
-        containerStyle={$field}
-        helper="Deixe em branco se ainda não foi restabelecida"
+      <Button
+        text={dataFim ? `Data de Fim: ${formatDate(dataFim)}` : 'Selecionar Data de Fim'}
+        style={$field}
+        onPress={() => !isWeb && setShowDateFimPicker(true)}
+        preset="reversed"
+        disabled={isWeb}
       />
-
-      <TextField
-        label="Hora de Fim"
-        placeholder="HH:MM"
-        value={horaFim}
-        onChangeText={setHoraFim}
-        containerStyle={$field}
+      {isWeb && (
+        <TextField
+          label="Data de Fim"
+          placeholder="AAAA-MM-DD"
+          value={dataFim}
+          onChangeText={setDataFim}
+          containerStyle={$field}
+        />
+      )}
+      {!isWeb && showDateFimPicker && (
+        <DateTimePicker
+          value={dataFim ? new Date(dataFim) : new Date()}
+          mode="date"
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={(event, selectedDate) => {
+            setShowDateFimPicker(false)
+            if (selectedDate) {
+              setDataFim(selectedDate.toISOString().slice(0, 10))
+            }
+          }}
+        />
+      )}
+      <Button
+        text={horaFim ? `Hora de Fim: ${formatTime(horaFim)}` : 'Selecionar Hora de Fim'}
+        style={$field}
+        onPress={() => !isWeb && setShowHoraFimPicker(true)}
+        preset="reversed"
+        disabled={isWeb}
       />
+      {isWeb && (
+        <TextField
+          label="Hora de Fim"
+          placeholder="HH:MM"
+          value={horaFim}
+          onChangeText={setHoraFim}
+          containerStyle={$field}
+        />
+      )}
+      {!isWeb && showHoraFimPicker && (
+        <DateTimePicker
+          value={horaFim ? new Date(`1970-01-01T${horaFim}:00`) : new Date()}
+          mode="time"
+          is24Hour={true}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          onChange={(event, selectedDate) => {
+            setShowHoraFimPicker(false)
+            if (selectedDate) {
+              const h = selectedDate.getHours().toString().padStart(2, '0')
+              const m = selectedDate.getMinutes().toString().padStart(2, '0')
+              setHoraFim(`${h}:${m}`)
+            }
+          }}
+        />
+      )}
 
       {!!duracaoEstimada && (
         <Text style={$durationText}>
@@ -267,7 +374,7 @@ const $root: ViewStyle = {
   backgroundColor: "#f8f9fa",
 }
 
-const $title: ViewStyle = {
+const $title: TextStyle = {
   marginBottom: 8,
   marginTop: 16,
   textAlign: "center",
@@ -279,13 +386,13 @@ const $eventTitle: TextStyle = {
   textAlign: "center",
 }
 
-const $subtitle: ViewStyle = {
+const $subtitle: TextStyle = {
   marginBottom: 24,
   textAlign: "center",
   color: "#444",
 }
 
-const $sectionTitle: ViewStyle = {
+const $sectionTitle: TextStyle = {
   marginTop: 16,
   marginBottom: 12,
   textAlign: "center",
