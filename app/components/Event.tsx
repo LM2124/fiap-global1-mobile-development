@@ -12,9 +12,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { Card } from "./Card"
 import { Icon } from "./Icon"
 
-// Todo: Ao invés de usar useNavigation(), considerar
-// passar a navigation por props por Home -> EventList -> Event
-type EventNavigationProps = NativeStackNavigationProp<AppStackParamList, "EventView">
+type EventNavigationProps = NativeStackNavigationProp<AppStackParamList, "Home">
 
 export interface EventProps {
   event: Evento
@@ -27,13 +25,13 @@ export const Event = (props: EventProps) => {
   const { event } = props
   const { themed } = useAppTheme()
   const navigation = useNavigation<EventNavigationProps>()
-
+  
   const danoTotal = useMemo(
     () =>
       event.danos
-        .map((dano) => dano.danoMonetario || 0)
+        .map((dano) => dano.danoMonetario ?? 0)
         .filter((dano) => dano > 0)
-        .reduce((a, b) => a + b),
+        .reduce((a, b) => a + b, 0),
     [event.danos],
   )
 
@@ -41,18 +39,17 @@ export const Event = (props: EventProps) => {
     <Card
       onPress={() => navigation.navigate("EventView", { eventId: event.idEvento })}
       heading={event.title}
-      RightComponent={<Icon icon="caretRight" containerStyle={themed($accessoryContainer)} />}
-      ContentComponent={
+      RightComponent={<Icon icon="caretRight" containerStyle={themed($accessoryContainer)} />}      ContentComponent={
         <>
           <Text>{event.descricao}</Text>
 
           <Text>
-            <b>Causas:</b> {event.causas.join(", ")}
+            <Text style={{ fontWeight: "bold" }}>Causas:</Text> {event.causas.join(", ")}
           </Text>
 
           {danoTotal > 0 && (
             <Text>
-              <b>Dano monetário total:</b> R$ {danoTotal?.toFixed(2)}
+              <Text style={{ fontWeight: "bold" }}>Dano monetário total:</Text> R$ {danoTotal?.toFixed(2)}
             </Text>
           )}
         </>

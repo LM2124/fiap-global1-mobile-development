@@ -9,7 +9,6 @@ export async function loadString(key: string): Promise<string | null> {
   try {
     return await AsyncStorage.getItem(key)
   } catch {
-    // not sure why this would fail... even reading the RN docs I'm unclear
     return null
   }
 }
@@ -85,19 +84,6 @@ export async function clear(): Promise<void> {
 export async function getAllKeys(): Promise<readonly string[]> {
   try {
     return await AsyncStorage.getAllKeys()
-  } catch {
-    return []
-  }
-}
-
-/**
- * Gets all key-value pairs from AsyncStorage.
- */
-export async function getAllItems(): Promise<readonly [string, string | null][]> {
-  try {
-    const keys = await getAllKeys()
-    const items = await AsyncStorage.multiGet(keys)
-    return items
   } catch {
     return []
   }
