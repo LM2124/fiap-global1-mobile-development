@@ -1,5 +1,5 @@
 import { FC, useState } from "react"
-import { Alert, ViewStyle } from "react-native"
+import { Alert, ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
@@ -146,32 +146,44 @@ export const EventCreateScreen: FC = () => {
 
 const $root: ViewStyle = {
   flex: 1,
+  paddingHorizontal: 20,
+  backgroundColor: "#f8f9fa",
 }
 
-const $title: ViewStyle = {
+const $title: TextStyle = {
   marginBottom: 8,
   marginTop: 16,
+  textAlign: "center",
 }
 
-const $subtitle: ViewStyle = {
+const $subtitle: TextStyle = {
   marginBottom: 24,
+  textAlign: "center",
+  color: "#444",
 }
 
 const $field: ViewStyle = {
   marginBottom: 16,
+  borderRadius: 10,
+  backgroundColor: "#fff",
+  paddingHorizontal: 8,
 }
 
-const $sectionTitle: ViewStyle = {
+const $sectionTitle: TextStyle = {
   marginTop: 16,
   marginBottom: 8,
+  textAlign: "center",
 }
 
-const $sectionSubtitle: ViewStyle = {
+const $sectionSubtitle: TextStyle = {
   marginBottom: 12,
+  textAlign: "center",
+  color: "#666",
 }
 
 const $causaButton: ViewStyle = {
   marginBottom: 8,
+  borderRadius: 8,
 }
 
 const $causaButtonSelected: ViewStyle = {
@@ -181,4 +193,5 @@ const $causaButtonSelected: ViewStyle = {
 const $createButton: ViewStyle = {
   marginTop: 32,
   marginBottom: 16,
+  borderRadius: 10,
 }

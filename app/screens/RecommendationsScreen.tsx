@@ -273,6 +273,7 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
 
 const $root: ViewStyle = {
   flex: 1,
+  paddingHorizontal: 20,
 }
 
 const $title: ViewStyle = {
@@ -296,8 +297,9 @@ const $subtitle: TextStyle = {
 }
 
 const $recommendationCard: ViewStyle = {
-  marginBottom: 16,
+  marginBottom: 20,
   padding: 16,
+  paddingHorizontal: 16,
   backgroundColor: "#f8f9fa",
   borderRadius: 12,
   borderLeftWidth: 4,

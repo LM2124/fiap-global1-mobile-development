@@ -263,29 +263,39 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
 
 const $root: ViewStyle = {
   flex: 1,
+  paddingHorizontal: 20,
+  backgroundColor: "#f8f9fa",
 }
 
 const $title: ViewStyle = {
   marginBottom: 8,
   marginTop: 16,
+  textAlign: "center",
 }
 
 const $eventTitle: TextStyle = {
   marginBottom: 16,
   fontWeight: "600",
+  textAlign: "center",
 }
 
 const $subtitle: ViewStyle = {
   marginBottom: 24,
+  textAlign: "center",
+  color: "#444",
 }
 
 const $sectionTitle: ViewStyle = {
   marginTop: 16,
   marginBottom: 12,
+  textAlign: "center",
 }
 
 const $field: ViewStyle = {
   marginBottom: 16,
+  borderRadius: 10,
+  backgroundColor: "#fff",
+  paddingHorizontal: 8,
 }
 
 const $durationText: TextStyle = {

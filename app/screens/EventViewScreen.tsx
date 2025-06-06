@@ -139,6 +139,8 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
 
 const $root: ViewStyle = {
   flex: 1,
+  paddingHorizontal: 20,
+  backgroundColor: "#f8f9fa",
 }
 
 const $loading: TextStyle = {
@@ -155,23 +157,26 @@ const $error: TextStyle = {
 const $title: TextStyle = {
   marginBottom: 16,
   marginTop: 16,
+  textAlign: "center",
 }
 
 const $label: TextStyle = {
   fontWeight: "600",
   marginTop: 16,
   marginBottom: 4,
+  color: "#444",
 }
 
 const $content: TextStyle = {
   marginBottom: 8,
+  color: "#222",
 }
 
 const $damageItem: TextStyle = {
   marginBottom: 12,
   padding: 12,
-  backgroundColor: "#f5f5f5",
-  borderRadius: 8,
+  backgroundColor: "#fff",
+  borderRadius: 10,
   borderLeftWidth: 3,
   borderLeftColor: "#007AFF",
 }

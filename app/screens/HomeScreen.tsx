@@ -80,30 +80,36 @@ export const HomeScreen: FC = () => {
 
 const $root: ViewStyle = {
   flex: 1,
+  paddingHorizontal: 20,
+  backgroundColor: "#f8f9fa",
 }
 
 const $welcomeText: TextStyle = {
-  margin: 16,
+  marginVertical: 16,
+  marginHorizontal: 0,
   marginBottom: 24,
   textAlign: "center",
   lineHeight: 22,
+  fontSize: 18,
+  color: "#222",
 }
 
 const $newEventButton: ViewStyle = {
-  marginHorizontal: 16,
   marginBottom: 24,
+  borderRadius: 10,
 }
 
 const $emptyStateText: TextStyle = {
-  margin: 16,
+  marginVertical: 16,
   textAlign: "center",
   color: "#666",
   fontStyle: "italic",
+  fontSize: 16,
 }
 
 const $sectionTitle: TextStyle = {
-  marginHorizontal: 16,
   marginBottom: 16,
   fontSize: 18,
   fontWeight: "600",
+  textAlign: "center",
 }

@@ -198,7 +198,10 @@ function ScreenWithScrolling(props: ScreenProps) {
 
   const ref = useRef<ScrollView>(null)
 
-  const { scrollEnabled, onContentSizeChange, onLayout } = useAutoPreset(props as AutoScreenProps)
+  // const { scrollEnabled, onContentSizeChange, onLayout } = useAutoPreset(props as AutoScreenProps)
+  // Força scroll sempre habilitado
+  const scrollEnabled = true
+  const { onContentSizeChange, onLayout } = useAutoPreset(props as AutoScreenProps)
 
   // Add native behavior of pressing the active tab to scroll to the top of the content
   // More info at: https://reactnavigation.org/docs/use-scroll-to-top/
@@ -301,4 +304,5 @@ const $justifyFlexEnd: ViewStyle = {
 const $innerStyle: ViewStyle = {
   justifyContent: "flex-start",
   alignItems: "stretch",
+
 }
