@@ -35,10 +35,13 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 const prefix = Linking.createURL("/")
 const config = {
   screens: {
-    Login: {
-      path: "",
-    },
-    Welcome: "welcome",
+    Home: "",
+    EventView: "event/:eventId",
+    EventCreate: "create",
+    LocationForm: "location/:eventId?",
+    InterruptionTimeForm: "time/:eventId?", 
+    DamagesForm: "damages/:eventId?",
+    Recommendations: "recommendations/:eventId",
   },
 }
 

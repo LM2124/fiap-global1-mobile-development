@@ -263,6 +263,7 @@ const $containerBase: ThemedStyle<ViewStyle> = (theme) => ({
   shadowRadius: 12.81,
   elevation: 16,
   minHeight: 96,
+  marginTop: 8
 })
 
 const $alignmentWrapper: ViewStyle = {

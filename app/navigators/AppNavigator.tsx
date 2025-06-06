@@ -29,10 +29,13 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  // 🔥 Your screens go here
   Home: undefined
-  // Fazendo a tipagem desse jeito caso eu mude o tipo de `idEvento` depois
   EventView: { eventId: Evento["idEvento"] }
+  EventCreate: undefined
+  LocationForm: { eventId?: Evento["idEvento"] }
+  InterruptionTimeForm: { eventId?: Evento["idEvento"] }
+  DamagesForm: { eventId?: Evento["idEvento"] }
+  Recommendations: { eventId: Evento["idEvento"] }
   // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -55,8 +58,8 @@ const AppStack = () => {
     theme: { colors },
   } = useAppTheme()
 
-  return (
-    <Stack.Navigator
+  return (    
+  <Stack.Navigator
       screenOptions={{
         headerShown: false,
         navigationBarColor: colors.background,
@@ -68,6 +71,11 @@ const AppStack = () => {
       {/** 🔥 Your screens go here */}
       <Stack.Screen name="Home" component={Screens.HomeScreen} />
       <Stack.Screen name="EventView" component={Screens.EventViewScreen} />
+      <Stack.Screen name="EventCreate" component={Screens.EventCreateScreen} />
+      <Stack.Screen name="LocationForm" component={Screens.LocationFormScreen} />
+      <Stack.Screen name="InterruptionTimeForm" component={Screens.InterruptionTimeFormScreen} />
+      <Stack.Screen name="DamagesForm" component={Screens.DamagesFormScreen} />
+      <Stack.Screen name="Recommendations" component={Screens.RecommendationsScreen} />
       {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
