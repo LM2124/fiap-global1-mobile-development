@@ -1,2 +1,1 @@
-export * from "./placeholderEvents"
-export * from "./placeholderUsers"
+// Data exports - currently empty as placeholder files were removed

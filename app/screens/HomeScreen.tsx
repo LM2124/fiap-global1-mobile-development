@@ -10,8 +10,6 @@ import { Evento } from "types"
 
 type HomeNavigationProp = NativeStackNavigationProp<AppStackParamList, "Home">
 
-// Tela 1 - Panorama Geral: Exibição de um resumo dos eventos registrados pelo usuário sobre falta de energia
-
 export const HomeScreen: FC = () => {
   const navigation = useNavigation<HomeNavigationProp>()
   const [events, setEvents] = useState<Evento[]>([])

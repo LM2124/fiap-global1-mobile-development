@@ -29,9 +29,7 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  // 🔥 Your screens go here
   Home: undefined
-  // Fazendo a tipagem desse jeito caso eu mude o tipo de `idEvento` depois
   EventView: { eventId: Evento["idEvento"] }
   EventCreate: undefined
   LocationForm: { eventId?: Evento["idEvento"] }

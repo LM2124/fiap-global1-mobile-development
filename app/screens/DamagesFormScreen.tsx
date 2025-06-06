@@ -15,7 +15,7 @@ interface DamagesFormScreenProps extends AppStackScreenProps<"DamagesForm"> {}
 export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
   const navigation = useNavigation<DamagesFormNavigationProp>()
   const { eventId } = route.params || {}
-  const actualEventId = eventId ?? 1 // Default para teste se não houver eventId
+  const actualEventId = eventId ?? 1
 
   const [descricaoDano, setDescricaoDano] = useState("")
   const [valorMonetario, setValorMonetario] = useState("")

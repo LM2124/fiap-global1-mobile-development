@@ -15,7 +15,7 @@ interface LocationFormScreenProps extends AppStackScreenProps<"LocationForm"> {}
 export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
   const navigation = useNavigation<LocationFormNavigationProp>()
   const { eventId } = route.params || {}
-  const actualEventId = eventId ?? 1 // Default para teste se não houver eventId
+  const actualEventId = eventId ?? 1
 
   const [descricao, setDescricao] = useState("")
   const [coordenadas, setCoordenadas] = useState("")

@@ -15,7 +15,7 @@ interface InterruptionTimeFormScreenProps extends AppStackScreenProps<"Interrupt
 export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = ({ route }) => {
   const navigation = useNavigation<InterruptionTimeFormNavigationProp>()
   const { eventId } = route.params || {}
-  const actualEventId = eventId ?? 1 // Default para teste se não houver eventId
+  const actualEventId = eventId ?? 1
 
   const [dataInicio, setDataInicio] = useState("")
   const [horaInicio, setHoraInicio] = useState("")
@@ -45,7 +45,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
             setHasExistingTimeInfo(true)
           }
           
-          // Pré-preencher com data atual se não houver dados
+          // Define data e hora atuais como padrão
           const now = new Date()
           const today = now.toISOString().split('T')[0]
           const currentTime = now.toTimeString().slice(0, 5)

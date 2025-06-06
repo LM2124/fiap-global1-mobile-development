@@ -123,7 +123,6 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
   const [isRestored, setIsRestored] = useState(initNavState)
 
   const routeNameRef = useRef<keyof AppStackParamList | undefined>()
-
   const onNavigationStateChange = (state: NavigationState | undefined) => {
     const previousRouteName = routeNameRef.current
     if (state !== undefined) {
@@ -132,9 +131,11 @@ export function useNavigationPersistence(storage: Storage, persistenceKey: strin
       if (previousRouteName !== currentRouteName) {
         // track screens.
         if (__DEV__) {
-          console.log(currentRouteName)
+          // Add analytics tracking here if needed
         }
-      }      // Save the current route name for later comparison
+      }
+
+      // Save the current route name for later comparison
       routeNameRef.current = currentRouteName as keyof AppStackParamList
 
       // Persist state to storage

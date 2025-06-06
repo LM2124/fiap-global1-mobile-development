@@ -1,5 +1,5 @@
 import { Evento, Local, Causas, Danos } from "types"
-import * as storage from "@/utils/storage"
+import * as storage from "@/utils/storage/asyncStorage"
 
 export interface EventCreateData {
   title: string
@@ -45,52 +45,31 @@ class EventService {
     }
   }  // Criar um novo evento
   async createEvent(data: EventCreateData): Promise<Evento> {
-    console.log("=== EventService.createEvent iniciado ===")
-    console.log("Dados recebidos:", data)
+    const events = await this.getAllEvents()
+    const nextId = await this.getNextId()
 
-    try {
-      console.log("Carregando eventos existentes...")
-      const events = await this.getAllEvents()
-      console.log("Eventos existentes carregados:", events.length, "eventos")
-
-      console.log("Obtendo próximo ID...")
-      const nextId = await this.getNextId()
-      console.log("Próximo ID obtido:", nextId)
-
-      const newEvent: Evento = {
-        idEvento: nextId,
-        autor: { 
-          id: "user1", 
-          name: "Usuário Local"
-        }, // User mockado por enquanto
-        title: data.title,
-        descricao: data.descricao,
-        dataHora: new Date(),
-        causas: data.causas,
-        local: data.local,
-        danos: data.danos ?? []
-      }
-
-      console.log("Novo evento criado em memória:", newEvent)
-
-      events.push(newEvent)
-      console.log("Evento adicionado à lista. Total de eventos agora:", events.length)
-
-      console.log("Salvando eventos...")
-      const saveResult = await this.saveEvents(events)
-      console.log("Resultado do salvamento:", saveResult)
-
-      if (!saveResult) {
-        throw new Error("Falha ao salvar o evento no storage")
-      }
-
-      console.log("=== EventService.createEvent concluído com sucesso ===")
-      return newEvent
-    } catch (error) {
-      console.error("=== ERRO em EventService.createEvent ===")
-      console.error("Erro:", error)
-      throw error
+    const newEvent: Evento = {
+      idEvento: nextId,
+      autor: { 
+        id: "user1", 
+        name: "Usuário Local"
+      },
+      title: data.title,
+      descricao: data.descricao,
+      dataHora: new Date(),
+      causas: data.causas,
+      local: data.local,
+      danos: data.danos ?? []
     }
+
+    events.push(newEvent)
+    const saveResult = await this.saveEvents(events)
+
+    if (!saveResult) {
+      throw new Error("Falha ao salvar o evento no storage")
+    }
+
+    return newEvent
   }
 
   // Obter evento por ID
