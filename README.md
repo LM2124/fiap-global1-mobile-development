@@ -1,77 +1,138 @@
-# Welcome to your new ignited app!
+# 🔌 PowerOutage Tracker
 
-> The latest and greatest boilerplate for Infinite Red opinions
+## Integrantes do Projeto
 
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
+- **RM 550695** - Gabriel Ferla
+- **RM 97158** - Lucas Moreno Matheus  
+- **RM 99389** - Victor Flávio Demarchi Viana
 
-- [Quick start documentation](https://github.com/infinitered/ignite/blob/master/docs/boilerplate/Boilerplate.md)
-- [Full documentation](https://github.com/infinitered/ignite/blob/master/docs/README.md)
+## Sobre o Projeto
 
-## Getting Started
+O **PowerOutage Tracker** é um aplicativo mobile desenvolvido em React Native para registrar e visualizar informações sobre episódios de falta de energia causados por eventos naturais. 
+
+Este projeto faz parte da **Global Solution FIAP** e tem como objetivo ajudar comunidades a documentar, analisar e se preparar melhor para interrupções no fornecimento de energia elétrica.
+
+### 📱 Funcionalidades Principais
+
+- **Panorama Geral**: Dashboard com resumo dos eventos registrados
+- **Registro de Localização**: Cadastro de regiões afetadas pela falta de energia
+- **Controle de Tempo**: Registro detalhado dos períodos de interrupção
+- **Registro de Prejuízos**: Documentação dos danos causados pela falta de energia
+- **Recomendações Inteligentes**: Orientações preventivas baseadas nas causas dos eventos
+
+### 🛠️ Tecnologias Utilizadas
+
+- **React Native** com TypeScript
+- **Expo** para desenvolvimento multiplataforma
+- **AsyncStorage** para persistência local de dados
+- **React Navigation** para navegação entre telas
+- **Ignite CLI** como boilerplate base
+
+## 🚀 Como Executar o Projeto
+
+### Pré-requisitos
+
+- Node.js (versão 16 ou superior)
+- npm ou yarn
+- Expo CLI instalado globalmente
+- Dispositivo móvel com Expo Go ou emulador configurado
+
+### Instalação e Execução
+
+1. **Clone o repositório e instale as dependências:**
 
 ```bash
 npm install
+```
+
+2. **Execute o projeto:**
+
+```bash
 npm run start
 ```
 
-To make things work on your local simulator, or on your phone, you need first to [run `eas build`](https://github.com/infinitered/ignite/blob/master/docs/expo/EAS.md). We have many shortcuts on `package.json` to make it easier:
+3. **Para executar em dispositivos específicos:**
 
 ```bash
-npm run build:ios:sim # build for ios simulator
-npm run build:ios:dev # build for ios device
-npm run build:ios:prod # build for ios device
+npm run build:ios:sim # iOS Simulator
+npm run build:ios:dev # iOS Device  
+npm run build:android # Android
 ```
 
-### `./assets` directory
+### 📁 Estrutura do Projeto
 
-This directory is designed to organize and store various assets, making it easy for you to manage and use them in your application. The assets are further categorized into subdirectories, including `icons` and `images`:
-
-```tree
-assets
-├── icons
-└── images
+```
+app/
+├── screens/           # Telas do aplicativo
+│   ├── HomeScreen.tsx                 # Panorama Geral
+│   ├── LocationFormScreen.tsx        # Registro de Localização
+│   ├── InterruptionTimeFormScreen.tsx # Controle de Tempo
+│   ├── DamagesFormScreen.tsx         # Registro de Prejuízos
+│   └── RecommendationsScreen.tsx     # Recomendações
+├── services/          # Serviços de dados
+│   └── eventService.ts               # CRUD com AsyncStorage
+├── components/        # Componentes reutilizáveis
+├── navigators/        # Configuração de navegação
+└── types/            # Definições TypeScript
 ```
 
-**icons**
-This is where your icon assets will live. These icons can be used for buttons, navigation elements, or any other UI components. The recommended format for icons is PNG, but other formats can be used as well.
+### 🎯 Funcionalidades Implementadas
 
-Ignite comes with a built-in `Icon` component. You can find detailed usage instructions in the [docs](https://github.com/infinitered/ignite/blob/master/docs/boilerplate/app/components/Icon.md).
+#### 1. **Dashboard Principal (HomeScreen)**
+- Visualização de todos os eventos registrados
+- Resumo estatístico dos dados
+- Navegação para registro de novos eventos
 
-**images**
-This is where your images will live, such as background images, logos, or any other graphics. You can use various formats such as PNG, JPEG, or GIF for your images.
+#### 2. **Registro de Localização (LocationFormScreen)**
+- Cadastro completo de regiões afetadas
+- Campos para cidade, estado, CEP
+- Coordenadas geográficas
+- Validação de dados
 
-Another valuable built-in component within Ignite is the `AutoImage` component. You can find detailed usage instructions in the [docs](https://github.com/infinitered/ignite/blob/master/docs/Components-AutoImage.md).
+#### 3. **Controle de Tempo (InterruptionTimeFormScreen)**
+- Registro de início e fim da interrupção
+- Seletores de data e hora intuitivos
+- Cálculo automático da duração total
+- Histórico de interrupções
 
-How to use your `icon` or `image` assets:
+#### 4. **Registro de Prejuízos (DamagesFormScreen)**
+- Catalogação de danos por categoria
+- Valores monetários com formatação brasileira
+- Cálculo automático de totais
+- Descrições detalhadas dos prejuízos
 
-```typescript
-import { Image } from 'react-native';
+#### 5. **Sistema de Recomendações (RecommendationsScreen)**
+- Recomendações personalizadas baseadas nas causas
+- Categorização por nível de prioridade
+- Contatos de emergência
+- Dicas de prevenção específicas
 
-const MyComponent = () => {
-  return (
-    <Image source={require('../assets/images/my_image.png')} />
-  );
-};
-```
+### 💾 Persistência de Dados
 
-## Running Maestro end-to-end tests
+O aplicativo utiliza **AsyncStorage** para armazenamento local, garantindo que todos os dados permaneçam disponíveis mesmo offline. As funcionalidades incluem:
 
-Follow our [Maestro Setup](https://ignitecookbook.com/docs/recipes/MaestroSetup) recipe.
+- ✅ Criação de novos registros
+- ✅ Listagem de eventos salvos
+- ✅ Edição de registros existentes
+- ✅ Exclusão de dados
+- ✅ Backup automático local
 
-## Next Steps
+### 🎨 Design e Interface
 
-### Ignite Cookbook
+O aplicativo foi desenvolvido seguindo princípios de **UX/UI modernas**:
 
-[Ignite Cookbook](https://ignitecookbook.com/) is an easy way for developers to browse and share code snippets (or “recipes”) that actually work.
+- Interface limpa e intuitiva
+- Navegação fluida entre telas
+- Feedback visual para ações do usuário
+- Responsividade para diferentes tamanhos de tela
+- Componentes reutilizáveis e consistentes
 
-### Upgrade Ignite boilerplate
+### 🔧 Arquitetura Técnica
 
-Read our [Upgrade Guide](https://ignitecookbook.com/docs/recipes/UpdatingIgnite) to learn how to upgrade your Ignite project.
+- **Linguagem**: TypeScript para tipagem segura  
+- **Framework**: React Native com Expo
+- **Navegação**: React Navigation v6
+- **Storage**: AsyncStorage para persistência local
+- **Estado**: Hooks do React para gerenciamento de estado
+- **Estilização**: StyleSheet nativo do React Native
 
-## Community
-
-⭐️ Help us out by [starring on GitHub](https://github.com/infinitered/ignite), filing bug reports in [issues](https://github.com/infinitered/ignite/issues) or [ask questions](https://github.com/infinitered/ignite/discussions).
-
-💬 Join us on [Slack](https://join.slack.com/t/infiniteredcommunity/shared_invite/zt-1f137np4h-zPTq_CbaRFUOR_glUFs2UA) to discuss.
-
-📰 Make our Editor-in-chief happy by [reading the React Native Newsletter](https://reactnativenewsletter.com/).
