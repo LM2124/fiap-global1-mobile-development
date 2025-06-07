@@ -1,12 +1,12 @@
-import { FC, useState, useEffect } from "react"
-import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useEffect, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
+import { Local } from "types"
 
 import { Button, Header, Screen, Text, TextField } from "@/components"
 import { AppStackParamList, AppStackScreenProps } from "@/navigators"
 import { eventService } from "@/services/eventService"
-import { Local } from "types"
 
 type LocationFormNavigationProp = NativeStackNavigationProp<AppStackParamList, "LocationForm">
 
@@ -34,7 +34,9 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
             setDescricao(event.local.descricao)
             setHasExistingLocation(true)
             if (event.local.coordenadas && event.local.coordenadas.length === 2) {
-              setCoordenadas(`${event.local.coordenadas[0] ?? 0}, ${event.local.coordenadas[1] ?? 0}`)
+              setCoordenadas(
+                `${event.local.coordenadas[0] ?? 0}, ${event.local.coordenadas[1] ?? 0}`,
+              )
             }
           }
         }
@@ -47,8 +49,8 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
 
   const parseCoordinates = (coordStr: string): [number, number] | undefined => {
     if (!coordStr.trim()) return undefined
-    
-    const coords = coordStr.split(",").map(c => parseFloat(c.trim()))
+
+    const coords = coordStr.split(",").map((c) => parseFloat(c.trim()))
     if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
       return [coords[0], coords[1]]
     }
@@ -67,11 +69,11 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
     try {
       const local: Local = {
         descricao: descricao.trim(),
-        coordenadas: parseCoordinates(coordenadas)
+        coordenadas: parseCoordinates(coordenadas),
       }
 
       const success = await eventService.addLocationToEvent(actualEventId, local)
-      
+
       if (success) {
         // Avança automaticamente para a próxima tela sem mostrar alert
         navigation.navigate("InterruptionTimeForm", { eventId: actualEventId })
@@ -88,25 +90,15 @@ export const LocationFormScreen: FC<LocationFormScreenProps> = ({ route }) => {
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header 
-        title="Localização" 
-        leftIcon="back"
-        onLeftPress={() => navigation.goBack()}
-      />
-      
+      <Header title="Localização" leftIcon="back" onLeftPress={() => navigation.goBack()} />
+
       <Text preset="heading" style={$title}>
         Localização Atingida
       </Text>
-      
-      {!!eventTitle && (
-        <Text style={$eventTitle}>
-          Evento: {eventTitle}
-        </Text>
-      )}
-      
-      <Text style={$subtitle}>
-        Informe onde ocorreu o evento de falta de energia
-      </Text>
+
+      {!!eventTitle && <Text style={$eventTitle}>Evento: {eventTitle}</Text>}
+
+      <Text style={$subtitle}>Informe onde ocorreu o evento de falta de energia</Text>
 
       <TextField
         label="Descrição da Localização *"

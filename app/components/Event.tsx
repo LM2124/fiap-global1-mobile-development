@@ -25,7 +25,7 @@ export const Event = (props: EventProps) => {
   const { event } = props
   const { themed } = useAppTheme()
   const navigation = useNavigation<EventNavigationProps>()
-  
+
   const danoTotal = useMemo(
     () =>
       event.danos
@@ -39,7 +39,8 @@ export const Event = (props: EventProps) => {
     <Card
       onPress={() => navigation.navigate("EventView", { eventId: event.idEvento })}
       heading={event.title}
-      RightComponent={<Icon icon="caretRight" containerStyle={themed($accessoryContainer)} />}      ContentComponent={
+      RightComponent={<Icon icon="caretRight" containerStyle={themed($accessoryContainer)} />}
+      ContentComponent={
         <>
           <Text>{event.descricao}</Text>
 
@@ -49,7 +50,8 @@ export const Event = (props: EventProps) => {
 
           {danoTotal > 0 && (
             <Text>
-              <Text style={{ fontWeight: "bold" }}>Dano monetário total:</Text> R$ {danoTotal?.toFixed(2)}
+              <Text style={{ fontWeight: "bold" }}>Dano monetário total:</Text> R${" "}
+              {danoTotal?.toFixed(2)}
             </Text>
           )}
         </>

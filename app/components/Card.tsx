@@ -8,10 +8,12 @@ import {
   ViewProps,
   ViewStyle,
 } from "react-native"
+
 import type { ThemedStyle, ThemedStyleArray } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { $styles } from "../theme"
 import { Text, TextProps } from "./Text"
-import { useAppTheme } from "@/utils/useAppTheme"
 
 type Presets = "default" | "reversed"
 
@@ -263,7 +265,7 @@ const $containerBase: ThemedStyle<ViewStyle> = (theme) => ({
   shadowRadius: 12.81,
   elevation: 16,
   minHeight: 96,
-  marginTop: 8
+  marginTop: 8,
 })
 
 const $alignmentWrapper: ViewStyle = {

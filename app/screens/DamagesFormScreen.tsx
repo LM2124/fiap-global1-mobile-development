@@ -1,12 +1,12 @@
-import { FC, useState, useEffect } from "react"
-import { Alert, ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useEffect, useState } from "react"
+import { Alert, TextStyle, ViewStyle } from "react-native"
+import { Danos } from "types"
 
 import { Button, Header, Screen, Text, TextField } from "@/components"
 import { AppStackParamList, AppStackScreenProps } from "@/navigators"
 import { eventService } from "@/services/eventService"
-import { Danos } from "types"
 
 type DamagesFormNavigationProp = NativeStackNavigationProp<AppStackParamList, "DamagesForm">
 
@@ -47,12 +47,12 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
   const formatCurrency = (value: string): string => {
     // Remove tudo que não for dígito
     const numericValue = value.replace(/\D/g, "")
-    
+
     if (!numericValue) return ""
-    
+
     // Converte para centavos
     const cents = parseInt(numericValue, 10)
-    
+
     // Formata como moeda brasileira
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -85,15 +85,15 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
       const newDamage: Danos = {
         descricao: descricaoDano.trim(),
         danoMonetario: parseCurrencyToNumber(valorMonetario),
-        idAutor: nomeAutor.trim() || "Usuário Anônimo"
+        idAutor: nomeAutor.trim() || "Usuário Anônimo",
       }
 
       const success = await eventService.addDamageToEvent(actualEventId, newDamage)
 
       if (success) {
         // Atualiza a lista local
-        setSavedDamages(prev => [...prev, newDamage])
-        
+        setSavedDamages((prev) => [...prev, newDamage])
+
         // Limpa os campos
         setDescricaoDano("")
         setValorMonetario("")
@@ -122,51 +122,39 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header 
-        title="Prejuízos Causados" 
-        leftIcon="back"
-        onLeftPress={() => navigation.goBack()}
-      />
-      
+      <Header title="Prejuízos Causados" leftIcon="back" onLeftPress={() => navigation.goBack()} />
+
       <Text preset="heading" style={$title}>
         Prejuízos Causados
       </Text>
-      
-      {!!eventTitle && (
-        <Text style={$eventTitle}>
-          Evento: {eventTitle}
-        </Text>
-      )}
-      
-      <Text style={$subtitle}>
-        Registre os prejuízos causados pela falta de energia
-      </Text>
+
+      {!!eventTitle && <Text style={$eventTitle}>Evento: {eventTitle}</Text>}
+
+      <Text style={$subtitle}>Registre os prejuízos causados pela falta de energia</Text>
 
       {savedDamages.length > 0 && (
         <>
           <Text preset="subheading" style={$sectionTitle}>
             Prejuízos Já Registrados ({savedDamages.length})
           </Text>
-          
+
           {savedDamages.map((dano, index) => (
             <Text key={`damage-${dano.descricao}-${index}`} style={$damageItem}>
               • {dano.descricao}
               {dano.danoMonetario && dano.danoMonetario > 0 && (
                 <Text style={$damageValue}>
-                  {"\n"}  Valor: R$ {dano.danoMonetario.toFixed(2)}
+                  {"\n"} Valor: R$ {dano.danoMonetario.toFixed(2)}
                 </Text>
               )}
               {dano.idAutor && (
                 <Text style={$damageAuthor}>
-                  {"\n"}  Por: {dano.idAutor}
+                  {"\n"} Por: {dano.idAutor}
                 </Text>
               )}
             </Text>
           ))}
-          
-          <Text style={$totalValue}>
-            💰 Total em prejuízos: R$ {getTotalDamages().toFixed(2)}
-          </Text>
+
+          <Text style={$totalValue}>💰 Total em prejuízos: R$ {getTotalDamages().toFixed(2)}</Text>
         </>
       )}
 
@@ -213,7 +201,8 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
       />
 
       <Text style={$infoText}>
-        💡 Você pode adicionar múltiplos prejuízos ao mesmo evento. Cada prejuízo será registrado separadamente.
+        💡 Você pode adicionar múltiplos prejuízos ao mesmo evento. Cada prejuízo será registrado
+        separadamente.
       </Text>
 
       {hasExistingDamages ? (
@@ -221,11 +210,7 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
           <Text style={$existingDataText}>
             ✅ Prejuízos já foram registrados. Você pode adicionar mais ou finalizar.
           </Text>
-          <Button
-            text="Ver Recomendações"
-            style={$continueButton}
-            onPress={handleFinish}
-          />
+          <Button text="Ver Recomendações" style={$continueButton} onPress={handleFinish} />
           <Button
             text="Voltar ao Início"
             preset="reversed"

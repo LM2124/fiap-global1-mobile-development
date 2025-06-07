@@ -1,12 +1,12 @@
-import { FC, useState, useEffect } from "react"
-import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useEffect, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
+import { Causas } from "types"
 
 import { Button, Header, Screen, Text } from "@/components"
 import { AppStackParamList, AppStackScreenProps } from "@/navigators"
 import { eventService } from "@/services/eventService"
-import { Causas } from "types"
 
 type Priority = "high" | "medium" | "low"
 type RecommendationsNavigationProp = NativeStackNavigationProp<AppStackParamList, "Recommendations">
@@ -36,7 +36,7 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
         if (event) {
           setEventTitle(event.title)
           setEventCausas(event.causas)
-          
+
           // Gera recomendações baseadas nas causas do evento
           const generatedRecommendations = generateRecommendations(event.causas)
           setRecommendations(generatedRecommendations)
@@ -50,129 +50,136 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
 
   const generateRecommendations = (causas: Causas[]): Recommendation[] => {
     const allRecommendations: Record<Causas, Recommendation[]> = {
-      "Chuva": [
+      Chuva: [
         {
           title: "Kit de Emergência",
           description: "Mantenha lanternas, velas, fósforos e pilhas sempre disponíveis em casa.",
           icon: "🔦",
-          priority: "high"
+          priority: "high",
         },
         {
           title: "Proteção de Equipamentos",
-          description: "Use filtros de linha com protetor contra surtos para proteger aparelhos eletrônicos.",
+          description:
+            "Use filtros de linha com protetor contra surtos para proteger aparelhos eletrônicos.",
           icon: "⚡",
-          priority: "high"
+          priority: "high",
         },
         {
           title: "Alimentos e Água",
           description: "Tenha água potável e alimentos não perecíveis para pelo menos 3 dias.",
           icon: "🥫",
-          priority: "medium"
-        }
+          priority: "medium",
+        },
       ],
-      "Vento": [
+      Vento: [
         {
           title: "Verificação da Rede Elétrica",
           description: "Reporte fios caídos ou postes danificados imediatamente à concessionária.",
           icon: "⚠️",
-          priority: "high"
+          priority: "high",
         },
         {
           title: "Segurança Doméstica",
-          description: "Verifique telhados, antenas e estruturas que podem ser afetadas por ventos fortes.",
+          description:
+            "Verifique telhados, antenas e estruturas que podem ser afetadas por ventos fortes.",
           icon: "🏠",
-          priority: "medium"
-        }
+          priority: "medium",
+        },
       ],
-      "Deslizamento": [
+      Deslizamento: [
         {
           title: "Evacuação de Emergência",
           description: "Tenha um plano de evacuação e rotas alternativas mapeadas.",
           icon: "🚨",
-          priority: "high"
+          priority: "high",
         },
         {
           title: "Comunicação",
           description: "Mantenha um rádio a pilha para receber informações de emergência.",
           icon: "📻",
-          priority: "high"
-        }
+          priority: "high",
+        },
       ],
-      "Árvores": [
+      Árvores: [
         {
           title: "Poda Preventiva",
-          description: "Solicite poda de árvores próximas à rede elétrica junto aos órgãos competentes.",
+          description:
+            "Solicite poda de árvores próximas à rede elétrica junto aos órgãos competentes.",
           icon: "🌳",
-          priority: "medium"
+          priority: "medium",
         },
         {
           title: "Monitoramento",
-          description: "Observe árvores com sinais de doença ou instabilidade próximas à sua residência.",
+          description:
+            "Observe árvores com sinais de doença ou instabilidade próximas à sua residência.",
           icon: "👀",
-          priority: "medium"
-        }
+          priority: "medium",
+        },
       ],
-      "Infraestrutura": [
+      Infraestrutura: [
         {
           title: "Gerador de Emergência",
-          description: "Considere investir em um gerador para equipamentos essenciais (geladeira, freezer).",
+          description:
+            "Considere investir em um gerador para equipamentos essenciais (geladeira, freezer).",
           icon: "🔋",
-          priority: "medium"
+          priority: "medium",
         },
         {
           title: "Backup de Dados",
           description: "Faça backup regular de documentos importantes e dados digitais.",
           icon: "💾",
-          priority: "low"
-        }
+          priority: "low",
+        },
       ],
-      "Outro": [
+      Outro: [
         {
           title: "Preparo Geral",
           description: "Mantenha-se informado sobre planos de contingência da sua região.",
           icon: "📋",
-          priority: "medium"
-        }
+          priority: "medium",
+        },
       ],
-      "Desconhecido": [
+      Desconhecido: [
         {
           title: "Preparo Geral",
           description: "Como a causa é desconhecida, prepare-se para diversos cenários.",
           icon: "❓",
-          priority: "medium"
-        }
-      ]
+          priority: "medium",
+        },
+      ],
     }
 
     // Recomendações gerais que sempre aparecem
     const generalRecommendations: Recommendation[] = [
       {
         title: "Contatos de Emergência",
-        description: "Tenha sempre à mão os números da concessionária de energia, bombeiros e defesa civil.",
+        description:
+          "Tenha sempre à mão os números da concessionária de energia, bombeiros e defesa civil.",
         icon: "📞",
-        priority: "high"
+        priority: "high",
       },
       {
         title: "Primeiros Socorros",
         description: "Mantenha um kit de primeiros socorros completo e saiba como usá-lo.",
         icon: "🏥",
-        priority: "medium"
+        priority: "medium",
       },
       {
         title: "Seguro Residencial",
-        description: "Verifique se seu seguro cobre danos causados por falta de energia prolongada.",
+        description:
+          "Verifique se seu seguro cobre danos causados por falta de energia prolongada.",
         icon: "🛡️",
-        priority: "low"
-      }
+        priority: "low",
+      },
     ]
 
     // Combina recomendações específicas com gerais
-    const specificRecommendations = causas.flatMap(causa => allRecommendations[causa] || [])
+    const specificRecommendations = causas.flatMap((causa) => allRecommendations[causa] || [])
     const combinedRecommendations = [...specificRecommendations, ...generalRecommendations]
 
     // Remove duplicatas baseado no título
     const uniqueRecommendations = combinedRecommendations.filter(
-      (rec, index, arr) => arr.findIndex(r => r.title === rec.title) === index
+      (rec, index, arr) => arr.findIndex((r) => r.title === rec.title) === index,
     )
 
     // Ordena por prioridade
@@ -184,17 +191,23 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
 
   const getPriorityColor = (priority: "high" | "medium" | "low"): string => {
     switch (priority) {
-      case "high": return "#FF3B30"
-      case "medium": return "#FF9500"
-      case "low": return "#007AFF"
+      case "high":
+        return "#FF3B30"
+      case "medium":
+        return "#FF9500"
+      case "low":
+        return "#007AFF"
     }
   }
 
   const getPriorityText = (priority: "high" | "medium" | "low"): string => {
     switch (priority) {
-      case "high": return "Alta Prioridade"
-      case "medium": return "Média Prioridade"
-      case "low": return "Baixa Prioridade"
+      case "high":
+        return "Alta Prioridade"
+      case "medium":
+        return "Média Prioridade"
+      case "low":
+        return "Baixa Prioridade"
     }
   }
 
@@ -207,51 +220,40 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header 
-        title="Recomendações" 
-        leftIcon="back"
-        onLeftPress={() => navigation.goBack()}
-      />
-      
+      <Header title="Recomendações" leftIcon="back" onLeftPress={() => navigation.goBack()} />
+
       <Text preset="heading" style={$title}>
         Recomendações de Segurança
       </Text>
-      
-      {!!eventTitle && (
-        <Text style={$eventTitle}>
-          Baseado no evento: {eventTitle}
-        </Text>
-      )}
+
+      {!!eventTitle && <Text style={$eventTitle}>Baseado no evento: {eventTitle}</Text>}
 
       {eventCausas.length > 0 && (
-        <Text style={$causasText}>
-          Causas identificadas: {eventCausas.join(", ")}
-        </Text>
+        <Text style={$causasText}>Causas identificadas: {eventCausas.join(", ")}</Text>
       )}
-      
+
       <Text style={$subtitle}>
         Siga estas recomendações para se preparar melhor para futuras emergências
       </Text>
 
       {recommendations.map((rec, index) => (
-        <Text key={`recommendation-${index}-${rec.title}`} style={[
-          $recommendationCard,
-          { borderLeftColor: getPriorityColor(rec.priority) }
-        ]}>
+        <Text
+          key={`recommendation-${index}-${rec.title}`}
+          style={[$recommendationCard, { borderLeftColor: getPriorityColor(rec.priority) }]}
+        >
           <Text style={$recommendationIcon}>{rec.icon}</Text>
           <Text style={$recommendationTitle}>{rec.title}</Text>
           <Text style={$recommendationDescription}>{rec.description}</Text>
-          <Text style={[
-            $recommendationPriority,
-            { color: getPriorityColor(rec.priority) }
-          ]}>
+          <Text style={[$recommendationPriority, { color: getPriorityColor(rec.priority) }]}>
             {getPriorityText(rec.priority)}
           </Text>
         </Text>
       ))}
 
       <Text style={$importantNote}>
-        ⚠️ <Text style={$importantNoteTitle}>Importante:</Text> Estas recomendações são baseadas nas causas do evento reportado. Para orientações específicas da sua região, consulte a Defesa Civil local.
+        ⚠️ <Text style={$importantNoteTitle}>Importante:</Text> Estas recomendações são baseadas nas
+        causas do evento reportado. Para orientações específicas da sua região, consulte a Defesa
+        Civil local.
       </Text>
 
       <Text style={$emergencyContacts}>

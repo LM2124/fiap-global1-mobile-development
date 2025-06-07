@@ -1,12 +1,12 @@
-import { FC, useEffect, useState } from "react"
-import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useEffect, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
+import { Evento } from "types"
 
-import { Header, Screen, Text, Button } from "@/components"
+import { Button, Header, Screen, Text } from "@/components"
 import { AppStackParamList, AppStackScreenProps } from "@/navigators"
 import { eventService } from "@/services/eventService"
-import { Evento } from "types"
 
 type EventViewNavigationProp = NativeStackNavigationProp<AppStackParamList, "EventView">
 
@@ -35,11 +35,7 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
   if (isLoading) {
     return (
       <Screen style={$root} preset="scroll">
-        <Header 
-          title="Carregando..." 
-          leftIcon="back"
-          onLeftPress={() => navigation.goBack()}
-        />
+        <Header title="Carregando..." leftIcon="back" onLeftPress={() => navigation.goBack()} />
         <Text style={$loading}>Carregando evento...</Text>
       </Screen>
     )
@@ -48,17 +44,9 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
   if (!event) {
     return (
       <Screen style={$root} preset="scroll">
-        <Header 
-          title="Erro" 
-          leftIcon="back"
-          onLeftPress={() => navigation.goBack()}
-        />
+        <Header title="Erro" leftIcon="back" onLeftPress={() => navigation.goBack()} />
         <Text style={$error}>Evento não encontrado.</Text>
-        <Button
-          text="Voltar"
-          onPress={() => navigation.goBack()}
-          style={$button}
-        />
+        <Button text="Voltar" onPress={() => navigation.goBack()} style={$button} />
       </Screen>
     )
   }
@@ -69,28 +57,24 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
 
   return (
     <Screen style={$root} preset="scroll">
-      <Header 
-        title={event.title} 
-        leftIcon="back"
-        onLeftPress={() => navigation.goBack()}
-      />
-      
+      <Header title={event.title} leftIcon="back" onLeftPress={() => navigation.goBack()} />
+
       <Text preset="heading" style={$title}>
         {event.title}
       </Text>
-      
+
       <Text style={$label}>Descrição:</Text>
       <Text style={$content}>{event.descricao}</Text>
-      
+
       <Text style={$label}>Data e Hora:</Text>
       <Text style={$content}>{event.dataHora.toLocaleString()}</Text>
-      
+
       <Text style={$label}>Causas:</Text>
       <Text style={$content}>{event.causas.join(", ")}</Text>
-      
+
       <Text style={$label}>Local:</Text>
       <Text style={$content}>{event.local.descricao}</Text>
-      
+
       {event.danos.length > 0 && (
         <>
           <Text style={$label}>Prejuízos Reportados ({event.danos.length}):</Text>
@@ -99,17 +83,17 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
               • {dano.descricao}
               {dano.danoMonetario && dano.danoMonetario > 0 && (
                 <Text style={$damageValue}>
-                  {"\n"}  Valor: R$ {dano.danoMonetario.toFixed(2)}
+                  {"\n"} Valor: R$ {dano.danoMonetario.toFixed(2)}
                 </Text>
               )}
               {dano.idAutor && (
                 <Text style={$damageAuthor}>
-                  {"\n"}  Por: {dano.idAutor}
+                  {"\n"} Por: {dano.idAutor}
                 </Text>
               )}
             </Text>
           ))}
-          
+
           {getTotalDamages() > 0 && (
             <Text style={$totalDamages}>
               💰 Total em prejuízos: R$ {getTotalDamages().toFixed(2)}
@@ -117,16 +101,16 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
           )}
         </>
       )}
-      
+
       <Text style={$label}>Registrado por:</Text>
       <Text style={$content}>{event.autor.name}</Text>
-      
+
       <Button
         text="Continuar Registro"
         onPress={() => navigation.navigate("LocationForm", { eventId: event.idEvento })}
         style={$button}
       />
-      
+
       <Button
         text="Voltar ao Início"
         preset="reversed"

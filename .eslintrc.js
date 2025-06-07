@@ -12,7 +12,7 @@ module.exports = {
   ],
   plugins: ["reactotron", "prettier", "simple-import-sort"],
   rules: {
-    "prettier/prettier": "error",
+    "prettier/prettier": ["error", { endOfLine: "auto" }],
     // typescript-eslint
     "@typescript-eslint/array-type": 0,
     "@typescript-eslint/ban-ts-comment": 0,

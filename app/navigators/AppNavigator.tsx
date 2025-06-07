@@ -58,8 +58,8 @@ const AppStack = () => {
     theme: { colors },
   } = useAppTheme()
 
-  return (    
-  <Stack.Navigator
+  return (
+    <Stack.Navigator
       screenOptions={{
         headerShown: false,
         navigationBarColor: colors.background,

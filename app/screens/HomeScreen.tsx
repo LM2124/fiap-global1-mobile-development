@@ -1,12 +1,12 @@
-import { FC, useEffect, useState, useCallback } from "react"
-import { ViewStyle, TextStyle } from "react-native"
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useCallback, useEffect, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
+import { Evento } from "types"
 
-import { Header, Screen, Button, Text, Event } from "@/components"
+import { Button, Event, Header, Screen, Text } from "@/components"
 import { AppStackParamList } from "@/navigators"
 import { eventService } from "@/services/eventService"
-import { Evento } from "types"
 
 type HomeNavigationProp = NativeStackNavigationProp<AppStackParamList, "Home">
 
@@ -30,7 +30,7 @@ export const HomeScreen: FC = () => {
   useFocusEffect(
     useCallback(() => {
       loadEvents()
-    }, [])
+    }, []),
   )
 
   useEffect(() => {
@@ -44,17 +44,13 @@ export const HomeScreen: FC = () => {
   return (
     <Screen style={$root} preset="scroll">
       <Header title="Panorama Geral" />
-      
+
       <Text style={$welcomeText}>
-        Bem-vindo ao sistema de registro de eventos de falta de energia! 
+        Bem-vindo ao sistema de registro de eventos de falta de energia!
         {"\n"}Aqui você pode visualizar e registrar novos eventos.
       </Text>
 
-      <Button
-        text="+ Registrar Novo Evento"
-        style={$newEventButton}
-        onPress={handleNewEvent}
-      />
+      <Button text="+ Registrar Novo Evento" style={$newEventButton} onPress={handleNewEvent} />
 
       {events.length === 0 && !isLoading ? (
         <Text style={$emptyStateText}>
@@ -63,10 +59,8 @@ export const HomeScreen: FC = () => {
         </Text>
       ) : (
         <>
-          <Text style={$sectionTitle}>
-            Eventos Registrados ({events.length})
-          </Text>
-          
+          <Text style={$sectionTitle}>Eventos Registrados ({events.length})</Text>
+
           {events.map((event) => (
             <Event key={event.idEvento} event={event} />
           ))}

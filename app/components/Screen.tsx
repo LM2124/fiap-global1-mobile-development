@@ -12,10 +12,12 @@ import {
   View,
   ViewStyle,
 } from "react-native"
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
+
+import { useAppTheme } from "@/utils/useAppTheme"
+
 import { $styles } from "../theme"
 import { ExtendedEdge, useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
-import { useAppTheme } from "@/utils/useAppTheme"
 
 export const DEFAULT_BOTTOM_OFFSET = 50
 
@@ -304,5 +306,4 @@ const $justifyFlexEnd: ViewStyle = {
 const $innerStyle: ViewStyle = {
   justifyContent: "flex-start",
   alignItems: "stretch",
-
 }

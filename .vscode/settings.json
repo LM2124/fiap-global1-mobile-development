@@ -5,8 +5,8 @@
 	},
 
 	"[typescriptreact]": {
-		// End-of-line LF (padrão linux) ao invés de CRLF (padrão windows)
-		"files.eol": "\n",
+		// End-of-line CRLF (padrão Windows) ao invés de LF (padrão linux)
+		"files.eol": "\r\n",
 
 		// Editar ou renomear uma tag edita o correspondente dela ao mesmo tempo
 		"editor.linkedEditing": true,

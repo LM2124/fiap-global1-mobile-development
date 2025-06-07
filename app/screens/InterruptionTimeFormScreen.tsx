@@ -1,14 +1,17 @@
-import { FC, useState, useEffect } from "react"
-import DateTimePicker from '@react-native-community/datetimepicker'
-import { Alert, ViewStyle, TextStyle, Platform } from "react-native"
+import DateTimePicker from "@react-native-community/datetimepicker"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useEffect, useState } from "react"
+import { Alert, Platform, TextStyle, ViewStyle } from "react-native"
 
 import { Button, Header, Screen, Text, TextField } from "@/components"
 import { AppStackParamList, AppStackScreenProps } from "@/navigators"
 import { eventService } from "@/services/eventService"
 
-type InterruptionTimeFormNavigationProp = NativeStackNavigationProp<AppStackParamList, "InterruptionTimeForm">
+type InterruptionTimeFormNavigationProp = NativeStackNavigationProp<
+  AppStackParamList,
+  "InterruptionTimeForm"
+>
 
 interface InterruptionTimeFormScreenProps extends AppStackScreenProps<"InterruptionTimeForm"> {}
 
@@ -31,7 +34,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
   const [showDateFimPicker, setShowDateFimPicker] = useState(false)
   const [showHoraFimPicker, setShowHoraFimPicker] = useState(false)
 
-  const isWeb = Platform.OS === 'web'
+  const isWeb = Platform.OS === "web"
 
   useEffect(() => {
     const loadEvent = async () => {
@@ -39,17 +42,17 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         const event = await eventService.getEventById(actualEventId)
         if (event) {
           setEventTitle(event.title)
-          
+
           // Verifica se já existem informações de tempo na descrição
           if (event.descricao.includes("--- INFORMAÇÕES DE TEMPO ---")) {
             setHasExistingTimeInfo(true)
           }
-          
+
           // Define data e hora atuais como padrão
           const now = new Date()
-          const today = now.toISOString().split('T')[0]
+          const today = now.toISOString().split("T")[0]
           const currentTime = now.toTimeString().slice(0, 5)
-          
+
           if (!dataInicio) setDataInicio(today)
           if (!horaInicio) setHoraInicio(currentTime)
         }
@@ -65,15 +68,15 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
       try {
         const inicio = new Date(`${dataInicio}T${horaInicio}:00`)
         const fim = new Date(`${dataFim}T${horaFim}:00`)
-        
+
         if (fim > inicio) {
           const diffMs = fim.getTime() - inicio.getTime()
           const diffHours = diffMs / (1000 * 60 * 60)
           const hours = Math.floor(diffHours)
           const minutes = Math.round((diffHours - hours) * 60)
-          
+
           if (hours > 0) {
-            const minutesText = minutes > 0 ? ` ${minutes}min` : ''
+            const minutesText = minutes > 0 ? ` ${minutes}min` : ""
             setDuracaoEstimada(`${hours}h${minutesText}`)
           } else {
             setDuracaoEstimada(`${minutes}min`)
@@ -127,15 +130,15 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
 
       // Adiciona informações de tempo à descrição do evento
       const timeDescription = `\n\n--- INFORMAÇÕES DE TEMPO ---\nInício: ${dataInicio} às ${horaInicio}${
-        dataFim && horaFim ? `\nFim: ${dataFim} às ${horaFim}` : ''
-      }${duracaoEstimada ? `\nDuração: ${duracaoEstimada}` : ''}${
-        observacoes ? `\nObservações: ${observacoes}` : ''
+        dataFim && horaFim ? `\nFim: ${dataFim} às ${horaFim}` : ""
+      }${duracaoEstimada ? `\nDuração: ${duracaoEstimada}` : ""}${
+        observacoes ? `\nObservações: ${observacoes}` : ""
       }`
 
       const updatedDescription = event.descricao + timeDescription
 
-      const success = await eventService.updateEvent(actualEventId, { 
-        descricao: updatedDescription 
+      const success = await eventService.updateEvent(actualEventId, {
+        descricao: updatedDescription,
       })
 
       if (success) {
@@ -165,32 +168,28 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header 
-        title="Tempo de Interrupção" 
+      <Header
+        title="Tempo de Interrupção"
         leftIcon="back"
         onLeftPress={() => navigation.goBack()}
       />
-      
+
       <Text preset="heading" style={$title}>
         Tempo de Interrupção
       </Text>
-      
-      {!!eventTitle && (
-        <Text style={$eventTitle}>
-          Evento: {eventTitle}
-        </Text>
-      )}
-      
-      <Text style={$subtitle}>
-        Registre quando ocorreu a interrupção de energia
-      </Text>
+
+      {!!eventTitle && <Text style={$eventTitle}>Evento: {eventTitle}</Text>}
+
+      <Text style={$subtitle}>Registre quando ocorreu a interrupção de energia</Text>
 
       <Text preset="subheading" style={$sectionTitle}>
         Início da Interrupção *
       </Text>
 
       <Button
-        text={dataInicio ? `Data de Início: ${formatDate(dataInicio)}` : 'Selecionar Data de Início'}
+        text={
+          dataInicio ? `Data de Início: ${formatDate(dataInicio)}` : "Selecionar Data de Início"
+        }
         style={$field}
         onPress={() => !isWeb && setShowDateInicioPicker(true)}
         preset="reversed"
@@ -209,7 +208,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         <DateTimePicker
           value={dataInicio ? new Date(dataInicio) : new Date()}
           mode="date"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={(event, selectedDate) => {
             setShowDateInicioPicker(false)
             if (selectedDate) {
@@ -219,7 +218,9 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         />
       )}
       <Button
-        text={horaInicio ? `Hora de Início: ${formatTime(horaInicio)}` : 'Selecionar Hora de Início'}
+        text={
+          horaInicio ? `Hora de Início: ${formatTime(horaInicio)}` : "Selecionar Hora de Início"
+        }
         style={$field}
         onPress={() => !isWeb && setShowHoraInicioPicker(true)}
         preset="reversed"
@@ -239,12 +240,12 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           value={horaInicio ? new Date(`1970-01-01T${horaInicio}:00`) : new Date()}
           mode="time"
           is24Hour={true}
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={(event, selectedDate) => {
             setShowHoraInicioPicker(false)
             if (selectedDate) {
-              const h = selectedDate.getHours().toString().padStart(2, '0')
-              const m = selectedDate.getMinutes().toString().padStart(2, '0')
+              const h = selectedDate.getHours().toString().padStart(2, "0")
+              const m = selectedDate.getMinutes().toString().padStart(2, "0")
               setHoraInicio(`${h}:${m}`)
             }
           }}
@@ -254,7 +255,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         Fim da Interrupção (Opcional)
       </Text>
       <Button
-        text={dataFim ? `Data de Fim: ${formatDate(dataFim)}` : 'Selecionar Data de Fim'}
+        text={dataFim ? `Data de Fim: ${formatDate(dataFim)}` : "Selecionar Data de Fim"}
         style={$field}
         onPress={() => !isWeb && setShowDateFimPicker(true)}
         preset="reversed"
@@ -273,7 +274,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         <DateTimePicker
           value={dataFim ? new Date(dataFim) : new Date()}
           mode="date"
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={(event, selectedDate) => {
             setShowDateFimPicker(false)
             if (selectedDate) {
@@ -283,7 +284,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         />
       )}
       <Button
-        text={horaFim ? `Hora de Fim: ${formatTime(horaFim)}` : 'Selecionar Hora de Fim'}
+        text={horaFim ? `Hora de Fim: ${formatTime(horaFim)}` : "Selecionar Hora de Fim"}
         style={$field}
         onPress={() => !isWeb && setShowHoraFimPicker(true)}
         preset="reversed"
@@ -303,12 +304,12 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           value={horaFim ? new Date(`1970-01-01T${horaFim}:00`) : new Date()}
           mode="time"
           is24Hour={true}
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={(event, selectedDate) => {
             setShowHoraFimPicker(false)
             if (selectedDate) {
-              const h = selectedDate.getHours().toString().padStart(2, '0')
-              const m = selectedDate.getMinutes().toString().padStart(2, '0')
+              const h = selectedDate.getHours().toString().padStart(2, "0")
+              const m = selectedDate.getMinutes().toString().padStart(2, "0")
               setHoraFim(`${h}:${m}`)
             }
           }}
@@ -316,9 +317,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
       )}
 
       {!!duracaoEstimada && (
-        <Text style={$durationText}>
-          ⏱️ Duração calculada: {duracaoEstimada}
-        </Text>
+        <Text style={$durationText}>⏱️ Duração calculada: {duracaoEstimada}</Text>
       )}
 
       <TextField
@@ -334,7 +333,8 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
       {hasExistingTimeInfo ? (
         <>
           <Text style={$existingDataText}>
-            ✅ Informações de tempo já foram registradas. Você pode editá-las ou prosseguir para a próxima etapa.
+            ✅ Informações de tempo já foram registradas. Você pode editá-las ou prosseguir para a
+            próxima etapa.
           </Text>
           <Button
             text={isLoading ? "Salvando..." : "Atualizar Informações"}

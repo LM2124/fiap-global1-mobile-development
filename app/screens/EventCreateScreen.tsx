@@ -1,16 +1,16 @@
-import { FC, useState } from "react"
-import { ViewStyle, TextStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { FC, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
+import { Causas } from "types"
 
 import { Button, Header, Screen, Text, TextField } from "@/components"
-import { eventService } from "@/services/eventService"
-import { Causas } from "types"
 import type { AppStackParamList } from "@/navigators"
+import { eventService } from "@/services/eventService"
 
 export const EventCreateScreen: FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>()
-  
+
   const [title, setTitle] = useState("")
   const [descricao, setDescricao] = useState("")
   const [selectedCausas, setSelectedCausas] = useState<Causas[]>([])
@@ -21,14 +21,18 @@ export const EventCreateScreen: FC = () => {
   const [causasError, setCausasError] = useState("")
 
   const causasOptions: Causas[] = [
-    "Chuva", "Vento", "Deslizamento", "Árvores", "Infraestrutura", "Outro", "Desconhecido"
+    "Chuva",
+    "Vento",
+    "Deslizamento",
+    "Árvores",
+    "Infraestrutura",
+    "Outro",
+    "Desconhecido",
   ]
 
   const toggleCausa = (causa: Causas) => {
-    setSelectedCausas(prev => 
-      prev.includes(causa) 
-        ? prev.filter(c => c !== causa)
-        : [...prev, causa]
+    setSelectedCausas((prev) =>
+      prev.includes(causa) ? prev.filter((c) => c !== causa) : [...prev, causa],
     )
   }
 
@@ -58,11 +62,11 @@ export const EventCreateScreen: FC = () => {
         title: title.trim(),
         descricao: descricao.trim(),
         causas: selectedCausas,
-        local: { descricao: "Localização a ser definida" }
+        local: { descricao: "Localização a ser definida" },
       }
       const newEvent = await eventService.createEvent(eventData)
       navigation.navigate("EventView", { eventId: newEvent.idEvento })
-    } catch (error) {
+    } catch {
       // Erro de backend ignorado para validação de campos obrigatórios
     } finally {
       setIsLoading(false)
@@ -71,19 +75,13 @@ export const EventCreateScreen: FC = () => {
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header 
-        title="Novo Evento" 
-        leftIcon="back"
-        onLeftPress={() => navigation.goBack()}
-      />
-      
+      <Header title="Novo Evento" leftIcon="back" onLeftPress={() => navigation.goBack()} />
+
       <Text preset="heading" style={$title}>
         Registrar Evento de Falta de Energia
       </Text>
-      
-      <Text style={$subtitle}>
-        Forneça as informações básicas sobre o evento
-      </Text>
+
+      <Text style={$subtitle}>Forneça as informações básicas sobre o evento</Text>
 
       <TextField
         label="Título do Evento"
@@ -110,25 +108,22 @@ export const EventCreateScreen: FC = () => {
       <Text preset="subheading" style={$sectionTitle}>
         Causas do Evento
       </Text>
-      
-      <Text style={$sectionSubtitle}>
-        Selecione todas as causas que se aplicam:
-      </Text>
+
+      <Text style={$sectionSubtitle}>Selecione todas as causas que se aplicam:</Text>
 
       {causasOptions.map((causa) => (
         <Button
           key={causa}
           text={causa}
           preset={selectedCausas.includes(causa) ? "default" : "reversed"}
-          style={[
-            $causaButton,
-            selectedCausas.includes(causa) && $causaButtonSelected
-          ]}
+          style={[$causaButton, selectedCausas.includes(causa) && $causaButtonSelected]}
           onPress={() => toggleCausa(causa)}
         />
       ))}
       {!!causasError && (
-        <Text style={{ color: '#FF3B30', marginBottom: 8, textAlign: 'center', fontSize: 14 }}>{causasError}</Text>
+        <Text style={{ color: "#FF3B30", marginBottom: 8, textAlign: "center", fontSize: 14 }}>
+          {causasError}
+        </Text>
       )}
 
       <Button

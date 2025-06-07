@@ -16,17 +16,19 @@ if (__DEV__) {
   // If you turn it off in metro.config.js, you'll have to manually import it.
   require("./devtools/ReactotronConfig.ts")
 }
+import "./utils/gestureHandler"
+
 import { useFonts } from "expo-font"
 import * as Linking from "expo-linking"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect, useState } from "react"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+
 import { initI18n } from "./i18n"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { customFontsToLoad } from "./theme"
 import { loadDateFnsLocale } from "./utils/formatDate"
-import "./utils/gestureHandler"
 import * as storage from "./utils/storage"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
@@ -39,7 +41,7 @@ const config = {
     EventView: "event/:eventId",
     EventCreate: "create",
     LocationForm: "location/:eventId?",
-    InterruptionTimeForm: "time/:eventId?", 
+    InterruptionTimeForm: "time/:eventId?",
     DamagesForm: "damages/:eventId?",
     Recommendations: "recommendations/:eventId",
   },
