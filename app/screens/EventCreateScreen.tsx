@@ -120,11 +120,7 @@ export const EventCreateScreen: FC = () => {
           onPress={() => toggleCausa(causa)}
         />
       ))}
-      {!!causasError && (
-        <Text style={{ color: "#FF3B30", marginBottom: 8, textAlign: "center", fontSize: 14 }}>
-          {causasError}
-        </Text>
-      )}
+      {!!causasError && <Text style={$causasErrorText}>{causasError}</Text>}
 
       <Button
         text={isLoading ? "Criando..." : "Criar Evento"}
@@ -180,6 +176,13 @@ const $causaButton: ViewStyle = {
 
 const $causaButtonSelected: ViewStyle = {
   backgroundColor: "#007AFF",
+}
+
+const $causasErrorText: TextStyle = {
+  color: "#FF3B30",
+  marginBottom: 8,
+  textAlign: "center",
+  fontSize: 14,
 }
 
 const $createButton: ViewStyle = {

@@ -61,9 +61,9 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
       }
     }
     loadEvent()
-  }, [actualEventId])
+  }, [actualEventId, dataInicio, horaInicio])
 
-  const calculateDuration = () => {
+  useEffect(() => {
     if (dataInicio && horaInicio && dataFim && horaFim) {
       try {
         const inicio = new Date(`${dataInicio}T${horaInicio}:00`)
@@ -86,10 +86,6 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         console.error("Erro de cálculo de duração:", error)
       }
     }
-  }
-
-  useEffect(() => {
-    calculateDuration()
   }, [dataInicio, horaInicio, dataFim, horaFim])
 
   const validateDates = (): boolean => {

@@ -45,13 +45,12 @@ export const Event = (props: EventProps) => {
           <Text>{event.descricao}</Text>
 
           <Text>
-            <Text style={{ fontWeight: "bold" }}>Causas:</Text> {event.causas.join(", ")}
+            <Text preset="bold">Causas:</Text> {event.causas.join(", ")}
           </Text>
 
           {danoTotal > 0 && (
             <Text>
-              <Text style={{ fontWeight: "bold" }}>Dano monetário total:</Text> R${" "}
-              {danoTotal?.toFixed(2)}
+              <Text preset="bold">Dano monetário total:</Text> R$ {danoTotal?.toFixed(2)}
             </Text>
           )}
         </>
