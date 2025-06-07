@@ -166,6 +166,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
       <Header
         title="Tempo de Interrupção"
+        backgroundColor="#f8f9fa"
         leftIcon="back"
         onLeftPress={() => navigation.goBack()}
       />
@@ -182,16 +183,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
         Início da Interrupção *
       </Text>
 
-      <Button
-        text={
-          dataInicio ? `Data de Início: ${formatDate(dataInicio)}` : "Selecionar Data de Início"
-        }
-        style={$field}
-        onPress={() => !isWeb && setShowDateInicioPicker(true)}
-        preset="reversed"
-        disabled={isWeb}
-      />
-      {isWeb && (
+      {isWeb ? (
         <TextField
           label="Data de Início"
           placeholder="AAAA-MM-DD"
@@ -199,8 +191,17 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           onChangeText={setDataInicio}
           containerStyle={$field}
         />
+      ) : (
+        <Button
+          text={
+            dataInicio ? `Data de Início: ${formatDate(dataInicio)}` : "Selecionar Data de Início"
+          }
+          style={$field}
+          onPress={() => !isWeb && setShowDateInicioPicker(true)}
+          preset="reversed"
+        />
       )}
-      {!isWeb && showDateInicioPicker && (
+      {showDateInicioPicker && (
         <DateTimePicker
           value={dataInicio ? new Date(dataInicio) : new Date()}
           mode="date"
@@ -213,16 +214,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           }}
         />
       )}
-      <Button
-        text={
-          horaInicio ? `Hora de Início: ${formatTime(horaInicio)}` : "Selecionar Hora de Início"
-        }
-        style={$field}
-        onPress={() => !isWeb && setShowHoraInicioPicker(true)}
-        preset="reversed"
-        disabled={isWeb}
-      />
-      {isWeb && (
+      {isWeb ? (
         <TextField
           label="Hora de Início"
           placeholder="HH:MM"
@@ -230,8 +222,17 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           onChangeText={setHoraInicio}
           containerStyle={$field}
         />
+      ) : (
+        <Button
+          text={
+            horaInicio ? `Hora de Início: ${formatTime(horaInicio)}` : "Selecionar Hora de Início"
+          }
+          style={$field}
+          onPress={() => !isWeb && setShowHoraInicioPicker(true)}
+          preset="reversed"
+        />
       )}
-      {!isWeb && showHoraInicioPicker && (
+      {showHoraInicioPicker && (
         <DateTimePicker
           value={horaInicio ? new Date(`1970-01-01T${horaInicio}:00`) : new Date()}
           mode="time"
@@ -250,14 +251,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
       <Text preset="subheading" style={$sectionTitle}>
         Fim da Interrupção (Opcional)
       </Text>
-      <Button
-        text={dataFim ? `Data de Fim: ${formatDate(dataFim)}` : "Selecionar Data de Fim"}
-        style={$field}
-        onPress={() => !isWeb && setShowDateFimPicker(true)}
-        preset="reversed"
-        disabled={isWeb}
-      />
-      {isWeb && (
+      {isWeb ? (
         <TextField
           label="Data de Fim"
           placeholder="AAAA-MM-DD"
@@ -265,8 +259,16 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           onChangeText={setDataFim}
           containerStyle={$field}
         />
+      ) : (
+        <Button
+          text={dataFim ? `Data de Fim: ${formatDate(dataFim)}` : "Selecionar Data de Fim"}
+          style={$field}
+          onPress={() => !isWeb && setShowDateFimPicker(true)}
+          preset="reversed"
+          disabled={isWeb}
+        />
       )}
-      {!isWeb && showDateFimPicker && (
+      {showDateFimPicker && (
         <DateTimePicker
           value={dataFim ? new Date(dataFim) : new Date()}
           mode="date"
@@ -279,14 +281,7 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           }}
         />
       )}
-      <Button
-        text={horaFim ? `Hora de Fim: ${formatTime(horaFim)}` : "Selecionar Hora de Fim"}
-        style={$field}
-        onPress={() => !isWeb && setShowHoraFimPicker(true)}
-        preset="reversed"
-        disabled={isWeb}
-      />
-      {isWeb && (
+      {isWeb ? (
         <TextField
           label="Hora de Fim"
           placeholder="HH:MM"
@@ -294,8 +289,15 @@ export const InterruptionTimeFormScreen: FC<InterruptionTimeFormScreenProps> = (
           onChangeText={setHoraFim}
           containerStyle={$field}
         />
+      ) : (
+        <Button
+          text={horaFim ? `Hora de Fim: ${formatTime(horaFim)}` : "Selecionar Hora de Fim"}
+          style={$field}
+          onPress={() => !isWeb && setShowHoraFimPicker(true)}
+          preset="reversed"
+        />
       )}
-      {!isWeb && showHoraFimPicker && (
+      {showHoraFimPicker && (
         <DateTimePicker
           value={horaFim ? new Date(`1970-01-01T${horaFim}:00`) : new Date()}
           mode="time"
@@ -398,7 +400,7 @@ const $field: ViewStyle = {
   marginBottom: 16,
   borderRadius: 10,
   backgroundColor: "#fff",
-  paddingHorizontal: 8,
+  padding: 12,
 }
 
 const $durationText: TextStyle = {

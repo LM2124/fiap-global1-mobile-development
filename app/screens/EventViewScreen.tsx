@@ -57,7 +57,12 @@ export const EventViewScreen: FC<EventViewScreenProps> = ({ route }) => {
 
   return (
     <Screen style={$root} preset="scroll">
-      <Header title={event.title} leftIcon="back" onLeftPress={() => navigation.goBack()} />
+      <Header
+        title={event.title}
+        leftIcon="back"
+        onLeftPress={() => navigation.goBack()}
+        backgroundColor="#f8f9fa"
+      />
 
       <Text preset="heading" style={$title}>
         {event.title}

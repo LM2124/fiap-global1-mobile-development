@@ -122,7 +122,12 @@ export const DamagesFormScreen: FC<DamagesFormScreenProps> = ({ route }) => {
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header title="Prejuízos Causados" leftIcon="back" onLeftPress={() => navigation.goBack()} />
+      <Header
+        title="Prejuízos Causados"
+        leftIcon="back"
+        onLeftPress={() => navigation.goBack()}
+        backgroundColor="#f8f9fa"
+      />
 
       <Text preset="heading" style={$title}>
         Prejuízos Causados

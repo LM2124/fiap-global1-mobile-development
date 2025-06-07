@@ -43,7 +43,7 @@ export const HomeScreen: FC = () => {
 
   return (
     <Screen style={$root} preset="scroll">
-      <Header title="Panorama Geral" />
+      <Header title="Panorama Geral" backgroundColor="#f8f9fa" />
 
       <Text style={$welcomeText}>
         Bem-vindo ao sistema de registro de eventos de falta de energia!

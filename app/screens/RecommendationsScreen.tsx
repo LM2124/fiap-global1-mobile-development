@@ -93,7 +93,12 @@ export const RecommendationsScreen: FC<RecommendationsScreenProps> = ({ route })
 
   return (
     <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-      <Header title="Recomendações" leftIcon="back" onLeftPress={() => navigation.goBack()} />
+      <Header
+        title="Recomendações"
+        leftIcon="back"
+        onLeftPress={() => navigation.goBack()}
+        backgroundColor="#f8f9fa"
+      />
 
       <Text preset="heading" style={$title}>
         Recomendações de Segurança
