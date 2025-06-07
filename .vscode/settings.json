@@ -10,9 +10,6 @@
 
 		// Editar ou renomear uma tag edita o correspondente dela ao mesmo tempo
 		"editor.linkedEditing": true,
-
-		// Desligado em favor da extensão auto-self-close-tag
-		"typescript.autoClosingTags": false
 	},
 
 	// Sempre terminar arquivos com um trailing newline.
